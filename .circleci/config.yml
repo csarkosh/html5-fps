@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/csarko.sh
+    docker:
+      - image: csarko/node_terraform_awscli
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install dependencies
+          command: npm ci
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: deploy
+          command: npm run build && aws s3 sync build s3://webgl.csarko.sh
