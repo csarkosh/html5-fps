@@ -25,5 +25,5 @@ jobs:
           overwrite: true
           to: 's3://webgl.csarko.sh'
 orbs:
-  aws-s3: circleci/aws-s3@x.y
+  aws-s3: circleci/aws-s3@1
 version: 2.1
