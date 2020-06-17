@@ -21,7 +21,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          from: bucket
+          from: build
           overwrite: true
           to: 's3://webgl.csarko.sh'
 orbs:
