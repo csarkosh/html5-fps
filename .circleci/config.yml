@@ -1,9 +1,7 @@
-version: 2
 jobs:
   build:
-    working_directory: ~/csarko.sh
     docker:
-      - image: csarko/node_terraform_awscli
+      - image: 'csarko/node_terraform_awscli'
     steps:
       - checkout
       - restore_cache:
@@ -14,7 +12,18 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ./node_modules
-      - run:
-          name: deploy
-          command: npm run build && aws s3 sync build s3://webgl.csarko.sh
+          - ./node_modules
+      - run: npm run build
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          aws-access-key-id: ${AWS_ACCESS_KEY_ID}
+          aws-region: us-east-1
+          aws-secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+          from: bucket
+          overwrite: true
+          to: 's3://webgl.csarko.sh'
+orbs:
+  aws-s3: circleci/aws-s3@x.y
+version: 2.1
