@@ -18,9 +18,9 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          aws-access-key-id: ${AWS_ACCESS_KEY_ID}
-          aws-region: us-east-1
-          aws-secret-access-key: ${AWS_SECRET_ACCESS_KEY}
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-region: AWS_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           from: bucket
           overwrite: true
           to: 's3://webgl.csarko.sh'
