@@ -13,6 +13,7 @@
 
 # misc
 .idea
+.terraform
 .DS_Store
 .env.local
 .env.development.local
