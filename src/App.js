@@ -2,14 +2,50 @@
 
 import React from 'react';
 import {withStyles} from "@material-ui/core";
+import { FaGithub as Github } from 'react-icons/fa'
 import vertShader from '!raw-loader!./shader.vert'
 import fragShader from '!raw-loader!./shader.frag'
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 const styles = theme => ({
+    appBarRoot: {
+        padding: '6px 8px',
+        '& > div': {
+            display: 'flex',
+            justifyContent: 'space-between',
+        },
+    },
+    titleButtonRoot: {
+        padding: '0 6px',
+    },
+    titleButtonLabel: {
+        color: 'white',
+        fontSize: 21,
+        fontWeight: 600,
+        textTransform: 'none',
+    },
+    body: {
+        backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: 48,
+    },
     canvas: {
-        height: '100%',
-        width: '100%',
+        maxWidth: 640,
+        maxHeight: 480,
+        width: '100%'
+    },
+    ghButtonRoot: {
+        color: 'white',
+        padding: 0,
+        '& svg': {
+            fontSize: 28,
+            marginRight: 8,
+        }
     }
 })
 
@@ -116,12 +152,51 @@ class App extends React.Component {
     render() {
         const { classes } = this.props
         return (
-            <canvas
-                className={classes.canvas}
-                ref={this.canvas}
-                id="glcanvas"
-            >
-            </canvas>
+            <React.Fragment>
+                <AppBar
+                    classes={{ root: classes.appBarRoot }}
+                    color="primary"
+                    position="fixed"
+                >
+                    <div>
+                        <Button
+                            classes={{
+                                root: classes.titleButtonRoot,
+                                label: classes.titleButtonLabel,
+                            }}
+                            component="a"
+                            href="/"
+                        >
+                            webgl.csarko.sh
+                        </Button>
+                        <Tooltip
+                            title="Link to source code"
+                        >
+                            <IconButton
+                                aria-label="Link to source code"
+                                classes={{ root: classes.ghButtonRoot }}
+                                component="a"
+                                href="https://github.com/csarkosh/webgl-react"
+                                target="_blank"
+                            >
+                                <Github />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                </AppBar>
+                <div className={classes.body}>
+                    <div>
+                        <canvas
+                            height={480}
+                            width={640}
+                            className={classes.canvas}
+                            ref={this.canvas}
+                            id="glcanvas"
+                        >
+                        </canvas>
+                    </div>
+                </div>
+            </React.Fragment>
         )
     }
 }
