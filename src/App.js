@@ -50,7 +50,6 @@ const styles = theme => ({
             marginRight: 8,
         }
     },
-
 })
 
 class App extends React.Component {
