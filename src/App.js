@@ -5,6 +5,7 @@ import {withStyles} from "@material-ui/core"
 import { FaGithub as Github } from 'react-icons/fa'
 import { AppBar, Button, IconButton, Tooltip } from '@material-ui/core'
 import triColorBlendTriangle from './programs/tri-color-blend-triangle'
+import twoTriangles from './programs/two-triangles'
 import ProgramButton from "./ProgramButton";
 
 
@@ -36,6 +37,12 @@ const styles = theme => ({
             justifyContent: 'center',
             width: '100%',
         },
+        '& > div:last-child': {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            maxWidth: 700,
+        }
     },
     canvas: {
         maxWidth: 640,
@@ -69,6 +76,7 @@ class App extends React.Component {
     }
 
     startProgram = (key, func) => () => {
+        if (key === this.state.active) return;
         this.setState({ active: key })
         func(this.gl)
     }
@@ -125,6 +133,12 @@ class App extends React.Component {
                             onClick={this.startProgram('tri-color-blend-triangle', triColorBlendTriangle)}
                         >
                             Tri-Color Blend Triangle
+                        </ProgramButton>
+                        <ProgramButton
+                            active={this.state.active === 'two-triangles'}
+                            onClick={this.startProgram('two-triangles', twoTriangles)}
+                        >
+                            Two Triangles
                         </ProgramButton>
                     </div>
                 </div>
