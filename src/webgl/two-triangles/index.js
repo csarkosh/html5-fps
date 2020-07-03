@@ -4,11 +4,11 @@ import vertSrc from "!raw-loader!./shader.vert"
 
 let frameId = undefined
 
-/**
- * Creates a WebGL program that renders 2 triangles.
- * @param {WebGLRenderingContext} gl
- */
 export default {
+    /**
+     * Creates a WebGL program that renders 2 triangles.
+     * @param {WebGLRenderingContext} gl
+     */
     start: gl => {
         const program = gl.createProgram()
         const fragShader = gl.createShader(gl.FRAGMENT_SHADER)
