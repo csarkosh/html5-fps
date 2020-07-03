@@ -1,5 +1,3 @@
-/* eslint import/no-webpack-loader-syntax: off */
-
 import React from 'react'
 import {withStyles} from "@material-ui/core"
 import { FaGithub as Github } from 'react-icons/fa'
@@ -73,8 +71,10 @@ const programs = [
 class App extends React.Component {
     /** @type {React.RefObject} */
     canvas = React.createRef()
-    /** @type WebGLRenderingContext */
+    /** @type {WebGLRenderingContext} */
     gl = undefined
+
+    currProgram = undefined
 
     state = {
         active: undefined
@@ -88,8 +88,12 @@ class App extends React.Component {
 
     startProgram = (key, program) => () => {
         if (key === this.state.active) return;
+        if (this.currProgram) {
+            this.currProgram.end()
+        }
         this.setState({ active: key })
-        program.start(this.gl)
+        this.currProgram = program
+        this.currProgram.start(this.gl)
     }
 
     render() {
@@ -118,6 +122,7 @@ class App extends React.Component {
                                 classes={{ root: classes.ghButtonRoot }}
                                 component="a"
                                 href="https://github.com/csarkosh/webgl-react"
+                                rel="noopener"
                                 target="_blank"
                             >
                                 <Github />
