@@ -4,8 +4,8 @@ import React from 'react'
 import {withStyles} from "@material-ui/core"
 import { FaGithub as Github } from 'react-icons/fa'
 import { AppBar, Button, IconButton, Tooltip } from '@material-ui/core'
-import triColorBlendTriangle from './programs/tri-color-blend-triangle'
-import twoTriangles from './programs/two-triangles'
+import triColorBlendTriangle from './webgl/tri-color-blend-triangle'
+import twoTriangles from './webgl/two-triangles'
 import ProgramButton from "./ProgramButton";
 
 
