@@ -3,61 +3,65 @@ import vertShader from "!raw-loader!./shader.vert";
 import fragShader from "!raw-loader!./shader.frag";
 
 /**
+ * Creates a WebGL program that blends color
+ * from each vertex of a triangle to the center.
  * @param {WebGLRenderingContext} gl
  */
-export default gl => {
-    gl.clearColor(0.75, 0.85, 0.8, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+export default {
+    start: gl => {
+        gl.clearColor(0.75, 0.85, 0.8, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const program = gl.createProgram()
-    addShaders(gl, program, vertShader, fragShader)
+        const program = gl.createProgram()
+        addShaders(gl, program, vertShader, fragShader)
 
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error('ERROR linking program!', gl.getProgramInfoLog(program));
-        return;
-    }
-    gl.validateProgram(program);
-    if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
-        console.error('ERROR validating program!', gl.getProgramInfoLog(program));
-        return;
-    }
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('ERROR linking program!', gl.getProgramInfoLog(program));
+            return;
+        }
+        gl.validateProgram(program);
+        if (!gl.getProgramParameter(program, gl.VALIDATE_STATUS)) {
+            console.error('ERROR validating program!', gl.getProgramInfoLog(program));
+            return;
+        }
 
-    const triangleVertices = new Float32Array([
-        // xy         rgb
-        0.0,  0.5,    1.0, 1.0, 0.0,
-        -0.5, -0.5,    0.7, 0.0, 1.0,
-        0.5, -0.5,    0.1, 1.0, 0.6
-    ]);
-    const triangleVertexBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, triangleVertices, gl.STATIC_DRAW);
-    const positionAttribLocation = gl.getAttribLocation(program, 'position');
-    const colorAttribLocation = gl.getAttribLocation(program, 'color');
-    gl.vertexAttribPointer(
-        positionAttribLocation,
-        2,
-        gl.FLOAT,
-        gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,
-        0
-    );
-    gl.vertexAttribPointer(
-        colorAttribLocation,
-        3,
-        gl.FLOAT,
-        gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,
-        2 * Float32Array.BYTES_PER_ELEMENT
-    );
+        const triangleVertices = new Float32Array([
+            // xy         rgb
+            0.0,  0.5,    1.0, 1.0, 0.0,
+            -0.5, -0.5,    0.7, 0.0, 1.0,
+            0.5, -0.5,    0.1, 1.0, 0.6
+        ]);
+        const triangleVertexBufferObject = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
+        gl.bufferData(gl.ARRAY_BUFFER, triangleVertices, gl.STATIC_DRAW);
+        const positionAttribLocation = gl.getAttribLocation(program, 'position');
+        const colorAttribLocation = gl.getAttribLocation(program, 'color');
+        gl.vertexAttribPointer(
+            positionAttribLocation,
+            2,
+            gl.FLOAT,
+            gl.FALSE,
+            5 * Float32Array.BYTES_PER_ELEMENT,
+            0
+        );
+        gl.vertexAttribPointer(
+            colorAttribLocation,
+            3,
+            gl.FLOAT,
+            gl.FALSE,
+            5 * Float32Array.BYTES_PER_ELEMENT,
+            2 * Float32Array.BYTES_PER_ELEMENT
+        );
 
-    gl.enableVertexAttribArray(positionAttribLocation);
-    gl.enableVertexAttribArray(colorAttribLocation);
+        gl.enableVertexAttribArray(positionAttribLocation);
+        gl.enableVertexAttribArray(colorAttribLocation);
 
-    gl.useProgram(program);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.useProgram(program);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+    },
+    end: () => {}
 }
-
 
 
 

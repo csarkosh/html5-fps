@@ -1,5 +1,11 @@
 precision highp float;
 
+uniform struct Uniforms {
+    vec4 fill;
+    float time;
+} uniforms;
+
+
 void main() {
-    gl_FragColor = vec4(0.3, 0.7, 0.3, 1.0);
+    gl_FragColor = uniforms.fill;
 }

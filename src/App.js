@@ -59,6 +59,17 @@ const styles = theme => ({
     },
 })
 
+const programs = [
+    {
+        name: 'Tri-Color Blend Triangle',
+        program: triColorBlendTriangle,
+    },
+    {
+        name: 'Two Triangles',
+        program: twoTriangles
+    }
+]
+
 class App extends React.Component {
     /** @type {React.RefObject} */
     canvas = React.createRef()
@@ -72,13 +83,13 @@ class App extends React.Component {
     componentDidMount() {
         const canvas = this.canvas
         this.gl = canvas.current.getContext('webgl')
-        this.startProgram('tri-color-blend-triangle', triColorBlendTriangle)()
+        this.startProgram(programs[0].name, programs[0].program)()
     }
 
-    startProgram = (key, func) => () => {
+    startProgram = (key, program) => () => {
         if (key === this.state.active) return;
         this.setState({ active: key })
-        func(this.gl)
+        program.start(this.gl)
     }
 
     render() {
@@ -128,18 +139,15 @@ class App extends React.Component {
                         </div>
                     </div>
                     <div>
-                        <ProgramButton
-                            active={this.state.active === 'tri-color-blend-triangle'}
-                            onClick={this.startProgram('tri-color-blend-triangle', triColorBlendTriangle)}
-                        >
-                            Tri-Color Blend Triangle
-                        </ProgramButton>
-                        <ProgramButton
-                            active={this.state.active === 'two-triangles'}
-                            onClick={this.startProgram('two-triangles', twoTriangles)}
-                        >
-                            Two Triangles
-                        </ProgramButton>
+                        {programs.map(({ name, program }) => (
+                            <ProgramButton
+                                active={this.state.active === name}
+                                key={name}
+                                onClick={this.startProgram(name, program)}
+                            >
+                                {name}
+                            </ProgramButton>
+                        ))}
                     </div>
                 </div>
             </React.Fragment>

@@ -3,39 +3,44 @@ import fragSrc from "!raw-loader!./shader.frag"
 import vertSrc from "!raw-loader!./shader.vert"
 
 /**
- *
+ * Creates a WebGL program that renders 2 triangles.
  * @param {WebGLRenderingContext} gl
  */
-export default gl => {
-    gl.clearColor(0.6,0.3,0.6,1)
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    const program = gl.createProgram()
-    const fragShader = gl.createShader(gl.FRAGMENT_SHADER)
-    gl.shaderSource(fragShader, fragSrc)
-    gl.compileShader(fragShader)
-    gl.attachShader(program, fragShader)
-    const vertShader = gl.createShader(gl.VERTEX_SHADER)
-    gl.shaderSource(vertShader, vertSrc)
-    gl.compileShader(vertShader)
-    gl.attachShader(program, vertShader)
+export default {
+    start: gl => {
+        gl.clearColor(0.6,0.3,0.6,1)
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+        const program = gl.createProgram()
+        const fragShader = gl.createShader(gl.FRAGMENT_SHADER)
+        gl.shaderSource(fragShader, fragSrc)
+        gl.compileShader(fragShader)
+        gl.attachShader(program, fragShader)
+        const vertShader = gl.createShader(gl.VERTEX_SHADER)
+        gl.shaderSource(vertShader, vertSrc)
+        gl.compileShader(vertShader)
+        gl.attachShader(program, vertShader)
+        gl.linkProgram(program)
+        gl.validateProgram(program)
+        gl.useProgram(program)
 
-    gl.linkProgram(program)
-    gl.validateProgram(program)
-    gl.useProgram(program)
+        const fillLoc = gl.getUniformLocation(program, 'uniforms.fill')
+        gl.uniform4fv(fillLoc, new Float32Array([0.3, 0.7, 0.3, 1.0]))
 
-    createTriangle(gl, program, new Float32Array([
-        -0.9, -0.9,
-        0.85, -0.9,
-        -0.9, 0.85
-    ]))
-    gl.drawArrays(gl.TRIANGLES, 0, 3)
+        createTriangle(gl, program, new Float32Array([
+            -0.9, -0.9,
+            0.85, -0.9,
+            -0.9, 0.85
+        ]))
+        gl.drawArrays(gl.TRIANGLES, 0, 3)
 
-     createTriangle(gl, program, new Float32Array([
-         0.9, -0.85,
-         0.9, 0.9,
-         -0.85, 0.9
-     ]))
-    gl.drawArrays(gl.TRIANGLES, 0, 3)
+         createTriangle(gl, program, new Float32Array([
+             0.9, -0.85,
+             0.9, 0.9,
+             -0.85, 0.9
+         ]))
+        gl.drawArrays(gl.TRIANGLES, 0, 3)
+    },
+    end: () => {}
 }
 
 const createTriangle = (gl, program, vertices) => {
