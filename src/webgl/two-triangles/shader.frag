@@ -8,4 +8,8 @@ uniform struct Uniforms {
 
 void main() {
     gl_FragColor = uniforms.fill;
+    gl_FragColor = vec4(
+        uniforms.fill.xyz * abs(sin(uniforms.time)),
+        1.0
+    );
 }

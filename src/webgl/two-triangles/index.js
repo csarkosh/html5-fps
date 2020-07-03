@@ -2,14 +2,14 @@
 import fragSrc from "!raw-loader!./shader.frag"
 import vertSrc from "!raw-loader!./shader.vert"
 
+let frameId = undefined
+
 /**
  * Creates a WebGL program that renders 2 triangles.
  * @param {WebGLRenderingContext} gl
  */
 export default {
     start: gl => {
-        gl.clearColor(0.6,0.3,0.6,1)
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
         const program = gl.createProgram()
         const fragShader = gl.createShader(gl.FRAGMENT_SHADER)
         gl.shaderSource(fragShader, fragSrc)
@@ -22,25 +22,35 @@ export default {
         gl.linkProgram(program)
         gl.validateProgram(program)
         gl.useProgram(program)
-
+        gl.clearColor(0.6,0.3,0.6,1)
         const fillLoc = gl.getUniformLocation(program, 'uniforms.fill')
         gl.uniform4fv(fillLoc, new Float32Array([0.3, 0.7, 0.3, 1.0]))
 
-        createTriangle(gl, program, new Float32Array([
-            -0.9, -0.9,
-            0.85, -0.9,
-            -0.9, 0.85
-        ]))
-        gl.drawArrays(gl.TRIANGLES, 0, 3)
+        const animFrame = (ts) => {
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+            const timeLoc = gl.getUniformLocation(program, 'uniforms.time')
+            gl.uniform1f(timeLoc, ts / 1000.0)
 
-         createTriangle(gl, program, new Float32Array([
-             0.9, -0.85,
-             0.9, 0.9,
-             -0.85, 0.9
-         ]))
-        gl.drawArrays(gl.TRIANGLES, 0, 3)
+            createTriangle(gl, program, new Float32Array([
+                -0.9, -0.9,
+                0.85, -0.9,
+                -0.9, 0.85
+            ]))
+            gl.drawArrays(gl.TRIANGLES, 0, 3)
+
+            createTriangle(gl, program, new Float32Array([
+                0.9, -0.85,
+                0.9, 0.9,
+                -0.85, 0.9
+            ]))
+            gl.drawArrays(gl.TRIANGLES, 0, 3)
+            frameId = window.requestAnimationFrame(animFrame)
+        };
+        frameId = window.requestAnimationFrame(animFrame)
     },
-    end: () => {}
+    end: () => {
+        window.cancelAnimationFrame(frameId)
+    }
 }
 
 const createTriangle = (gl, program, vertices) => {
