@@ -25,10 +25,10 @@ export default {
         gl.clearColor(0.6,0.3,0.6,1)
         const fillLoc = gl.getUniformLocation(program, 'uniforms.fill')
         gl.uniform4fv(fillLoc, new Float32Array([0.3, 0.7, 0.3, 1.0]))
+        const timeLoc = gl.getUniformLocation(program, 'uniforms.time')
 
         const animFrame = (ts) => {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-            const timeLoc = gl.getUniformLocation(program, 'uniforms.time')
             gl.uniform1f(timeLoc, ts / 1000.0)
 
             createTriangle(gl, program, new Float32Array([
