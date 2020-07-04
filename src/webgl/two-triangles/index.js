@@ -56,7 +56,7 @@ export default {
 const createTriangle = (gl, program, vertices) => {
     const tri1VertBuff = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, tri1VertBuff)
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW)
     const tri1PosAttr = gl.getAttribLocation(program, 'position')
     gl.vertexAttribPointer(
         tri1PosAttr,

@@ -4,6 +4,7 @@ import { FaGithub as Github } from 'react-icons/fa'
 import { AppBar, Button, IconButton, Tooltip } from '@material-ui/core'
 import triColorBlendTriangle from './webgl/tri-color-blend-triangle'
 import twoTriangles from './webgl/two-triangles'
+import manyRectangles from './webgl/many-rectangles'
 import ProgramButton from "./ProgramButton";
 
 
@@ -49,15 +50,19 @@ const styles = theme => ({
     },
     ghButtonRoot: {
         color: 'white',
-        padding: 0,
+        marginRight: 8,
+        padding: 4,
         '& svg': {
             fontSize: 28,
-            marginRight: 8,
         }
     },
 })
 
 const programs = [
+    {
+        name: '50 Rectangles',
+        program: manyRectangles,
+    },
     {
         name: 'Tri-Color Blend Triangle',
         program: triColorBlendTriangle,
