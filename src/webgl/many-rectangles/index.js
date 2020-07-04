@@ -35,14 +35,10 @@ export default {
         const colorLoc = gl.getUniformLocation(program, 'color')
         gl.clear(gl.COLOR_BUFFER_BIT)
         for (let i = 0; i < 50; i++) {
-            //const width = randomInt(300)
             const width = randomInt()
-            //const height = randomInt(300)
             const height = randomInt()
-            //const x1 = randomInt(300)
             const x1 = randomInt()
             const x2 = x1 + width
-            //const y1 = randomInt(300)
             const y1 = randomInt()
             const y2 = y1 + height
             const posBuff = gl.createBuffer()
