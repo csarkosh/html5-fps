@@ -27,6 +27,18 @@ jobs:
       - aws-s3/sync:
           arguments: |
             --acl public-read \
+            --exclude * \
+            --include static/* \
+            --cache-control max-age=31536000
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-region: AWS_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          from: build
+          overwrite: true
+          to: 's3://webgl.csarko.sh'
+      - aws-s3/sync:
+          arguments: |
+            --acl public-read \
             --cache-control "max-age=0" \
             --include index.html
           aws-access-key-id: AWS_ACCESS_KEY_ID
