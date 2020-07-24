@@ -1,12 +1,8 @@
 import React from 'react'
 import {withStyles} from "@material-ui/core"
 import { AppBar, Button, IconButton, Menu, MenuItem } from '@material-ui/core'
-import { Launch, Fullscreen, MoreVert } from '@material-ui/icons'
+import { Launch, MoreVert } from '@material-ui/icons'
 import * as B from '@babylonjs/core'
-import * as M from '@babylonjs/materials'
-import ProgramButton from "./ProgramButton";
-import CanvasSettingsButton from "./CanvasSettingsButton";
-import VideoSettings from "./VideoSettings";
 
 const APP_BAR_HEIGHT = '48px'
 
@@ -38,17 +34,11 @@ const styles = theme => ({
             display: 'flex',
             justifyContent: 'center',
             width: '100%',
-        },
-        '& > div:last-child': {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            maxWidth: 700,
         }
     },
     canvas: {
-        maxWidth: 640,
-        maxHeight: 480,
+        maxWidth: 1280,
+        maxHeight: 720,
         width: '100%',
         '&:focus': {
             outline: 'none',
@@ -62,12 +52,6 @@ const styles = theme => ({
             fontSize: 28,
         }
     },
-    buttonWrapper: {
-        marginTop: 8,
-        '& > button + button': {
-            marginLeft: 24,
-        },
-    },
 })
 
 
@@ -79,7 +63,6 @@ class App extends React.Component {
 
     state = {
         settingsAnchorEl: null,
-        res: '640x480',
         resAnchorEl: null,
     }
 
@@ -91,11 +74,11 @@ class App extends React.Component {
         camera.attachControl(this.canvas.current, true)
         const light = new B.HemisphericLight('light1', new B.Vector3(0, 1, 0), scene)
         light.intensity = 0.7
-        const material = new M.GridMaterial('grid', scene)
         const sphere = B.Mesh.CreateSphere('sphere1', 16, 2, scene)
         sphere.position.y = 2
-        sphere.material = material
+        B.MeshBuilder.CreateGround('ground', { height: 15, width: 15, subdivisions: 2 })
         this.engine.runRenderLoop(() => scene.render())
+
     }
 
     enterFullscreen = () => {
@@ -115,7 +98,6 @@ class App extends React.Component {
 
     render() {
         const { classes } = this.props
-        const [width, height] = this.state.res.split('x')
         return (
             <React.Fragment>
                 <AppBar
@@ -162,49 +144,14 @@ class App extends React.Component {
                     <div>
                         <div className={classes.canvasWrapper}>
                             <canvas
-                                height={height}
-                                width={width}
+                                height={720}
+                                width={1280}
                                 className={classes.canvas}
                                 ref={this.canvas}
                                 id="glcanvas"
                             >
                             </canvas>
                         </div>
-                    </div>
-                    <div className={classes.buttonWrapper}>
-                        <CanvasSettingsButton
-                            icon={<Fullscreen color="inherit" fontSize="large" />}
-                            label="Fullscreen"
-                            onClick={this.enterFullscreen}
-                        />
-                        <CanvasSettingsButton
-                            icon={<VideoSettings color="inherit" fontSize="large" />}
-                            label="Resolution"
-                            onClick={this.resOpen}
-                        />
-                        <Menu
-                            anchorEl={this.state.resAnchorEl}
-                            keepMounted
-                            onClose={this.resClose}
-                            open={Boolean(this.state.resAnchorEl)}
-                        >
-                            <MenuItem component="button" onClick={this.setRes} value="640x480">480p</MenuItem>
-                            <MenuItem component="button" onClick={this.setRes} value="1280x720">720p</MenuItem>
-                            <MenuItem component="button" onClick={this.setRes} value="1920x1080">1080p</MenuItem>
-                            <MenuItem component="button" onClick={this.setRes} value="2560x1440">1440p</MenuItem>
-                            <MenuItem component="button" onClick={this.setRes} value="3840x2160">2160p</MenuItem>
-                        </Menu>
-                    </div>
-                    <div>
-                        {[].map(({ name, program }) => (
-                            <ProgramButton
-                                active={this.state.active === name}
-                                key={name}
-                                onClick={this.startProgram(name, program)}
-                            >
-                                {name}
-                            </ProgramButton>
-                        ))}
                     </div>
                 </div>
             </React.Fragment>
