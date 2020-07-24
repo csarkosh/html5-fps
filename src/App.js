@@ -54,12 +54,13 @@ const styles = theme => ({
     },
 })
 
-
 class App extends React.Component {
     /** @type {React.RefObject} */
     canvas = React.createRef()
     /** @type {Engine} */
     engine = null
+
+    keysDown = {}
 
     state = {
         settingsAnchorEl: null,
@@ -69,16 +70,35 @@ class App extends React.Component {
     componentDidMount() {
         this.engine = new B.Engine(this.canvas.current)
         const scene = new B.Scene(this.engine)
-        const camera = new B.FreeCamera('camera1', new B.Vector3(0, 5, -10), scene)
+        const camera = new B.UniversalCamera('camera1', new B.Vector3(0, 5, -10), scene)
         camera.setTarget(new B.Vector3.Zero())
         camera.attachControl(this.canvas.current, true)
+        camera.keysUp.push(87)
+        camera.keysDown.push(83)
+        camera.keysLeft.push(65)
+        camera.keysRight.push(68)
+        camera.speed = 0.4
+        console.log(camera.speed)
         const light = new B.HemisphericLight('light1', new B.Vector3(0, 1, 0), scene)
         light.intensity = 0.7
         const sphere = B.Mesh.CreateSphere('sphere1', 16, 2, scene)
         sphere.position.y = 2
         B.MeshBuilder.CreateGround('ground', { height: 15, width: 15, subdivisions: 2 })
-        this.engine.runRenderLoop(() => scene.render())
+        window.document.onkeydown = e => {
+            this.keysDown[e.key] = true
+        }
+        window.document.onkeyup = e => {
+            delete this.keysDown[e.key]
+        }
+        this.engine.runRenderLoop(() => {
+            camera.position.y = 5
+            scene.render()
+        })
+    }
 
+    componentWillUnmount() {
+        window.document.onkeydown = undefined
+        window.document.onkeyup = undefined
     }
 
     enterFullscreen = () => {
