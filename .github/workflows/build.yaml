@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'public/**'
+      - 'src/**'
 jobs:
   build:
     name: build and deploy
