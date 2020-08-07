@@ -1,5 +1,6 @@
 import React from "react";
 import {Engine, HemisphericLight, Mesh, MeshBuilder, Scene, UniversalCamera, Vector3} from '@babylonjs/core'
+import {FaPlay} from "react-icons/fa";
 
 class Game extends React.Component {
     /** @type {React.Ref} */
@@ -9,13 +10,21 @@ class Game extends React.Component {
     /** @type {Object.<String, Boolean>} */
     keysDown = {}
 
+    state = {
+        showPlayButton: true
+    }
+
     componentDidMount() {
-        window.document.onkeydown = e => {
-            this.keysDown[e.key] = true
-        }
-        window.document.onkeydown = e => {
-            delete this.keysDown[e.key]
-        }
+        window.document.addEventListener(
+            'keydown',
+            e => this.keysDown[e.key] = true,
+            { passive: true }
+        )
+        window.document.addEventListener(
+            'keyup',
+            e => delete this.keysDown[e.key],
+            { passive: true }
+        )
 
         this.engine = new Engine(this.canvas.current)
         const scene = new Scene(this.engine)
@@ -28,18 +37,39 @@ class Game extends React.Component {
         sphere.position.y = 2
         MeshBuilder.CreateGround('ground', { height: 15, width: 15, subdivisions: 2 })
         this.engine.runRenderLoop(() => {
+            if (this.engine.isPointerLock && !this.state.showPlayButton) {
+                this.setState({ showPlayButton: true })
+            }
             camera.position.y = 5
             scene.render()
         })
     }
 
+    onPlay = e => {
+        this.engine.enterFullscreen(true)
+        this.setState({ showPlayButton: false })
+    }
+
     render() {
         return (
-            <canvas
-                height={720}
-                ref={this.canvas}
-                width={1280}
-            />
+            <div className="overlay-container">
+                {this.state.showPlayButton && (
+                    <div>
+                        <button
+                            className="btn btn-primary btn-action btn-xl s-circle"
+                            onClick={this.onPlay}
+                            onTouchEnd={this.onPlay}
+                        >
+                            <FaPlay className="svg-xl" />
+                        </button>
+                    </div>
+                )}
+                <canvas
+                    height={720}
+                    ref={this.canvas}
+                    width={1280}
+                />
+            </div>
         )
     }
 }

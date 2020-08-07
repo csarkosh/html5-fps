@@ -1,3 +1,8 @@
 .navbar {
     padding: 4px 16px;
 }
+
+.btn.btn-xl {
+    height: 4em;
+    width: 4em;
+}
