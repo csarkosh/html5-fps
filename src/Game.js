@@ -1,6 +1,13 @@
 import React from "react";
-import {Engine, HemisphericLight, Mesh, MeshBuilder, Scene, UniversalCamera, Vector3} from '@babylonjs/core'
-import {FaPlay} from "react-icons/fa";
+import {
+    Engine,
+    HemisphericLight,
+    Mesh,
+    MeshBuilder,
+    Scene,
+    UniversalCamera,
+    Vector3
+} from '@babylonjs/core'
 
 class Game extends React.Component {
     /** @type {React.Ref} */
@@ -9,10 +16,6 @@ class Game extends React.Component {
     engine = null
     /** @type {Object.<String, Boolean>} */
     keysDown = {}
-
-    state = {
-        showPlayButton: true
-    }
 
     componentDidMount() {
         window.document.addEventListener(
@@ -36,10 +39,10 @@ class Game extends React.Component {
         const sphere = Mesh.CreateSphere('sphere1', 16, 2, scene)
         sphere.position.y = 2
         MeshBuilder.CreateGround('ground', { height: 15, width: 15, subdivisions: 2 })
+
+        //let prevMousePosX = scene.pointerX
+        //let prevMousePosY = scene.pointerY
         this.engine.runRenderLoop(() => {
-            if (this.engine.isPointerLock && !this.state.showPlayButton) {
-                this.setState({ showPlayButton: true })
-            }
             camera.position.y = 5
             scene.render()
         })
@@ -47,23 +50,25 @@ class Game extends React.Component {
 
     onPlay = e => {
         this.engine.enterFullscreen(true)
-        this.setState({ showPlayButton: false })
     }
 
     render() {
         return (
             <div className="overlay-container">
-                {this.state.showPlayButton && (
-                    <div>
-                        <button
-                            className="btn btn-primary btn-action btn-xl s-circle"
-                            onClick={this.onPlay}
-                            onTouchEnd={this.onPlay}
-                        >
-                            <FaPlay className="svg-xl" />
-                        </button>
-                    </div>
-                )}
+                <div>
+                    <button
+                        className="btn btn-primary btn-xl"
+                        onClick={this.onPlay}
+                        onTouchEnd={this.onPlay}
+                    >
+                        Play
+                    </button>
+                    <button
+                        className="btn btn-primary btn-xl"
+                    >
+                        Options
+                    </button>
+                </div>
                 <canvas
                     height={720}
                     ref={this.canvas}

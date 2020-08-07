@@ -13,7 +13,9 @@ code {
 }
 
 canvas {
+  height: 100vh;
   outline: 0;
+  width: 100vw;
 }
 
 .svg-xl {
@@ -31,9 +33,14 @@ canvas {
     backdrop-filter: blur(3px);
     background-color: rgba(0, 0, 0, 0.38);
     display: flex;
+    flex-direction: column;
     height: 100%;
     justify-content: center;
     position: absolute;
     width: 100%;
+    & button + button {
+      margin-top: 16px;
+    }
+
   }
 }
