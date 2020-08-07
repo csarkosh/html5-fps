@@ -1,7 +1,7 @@
 import React from 'react'; 
 import ReactDOM from 'react-dom';
 import 'spectre.css';
-import './spectre.overrides.css'
+import './spectre.overrides.scss'
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
