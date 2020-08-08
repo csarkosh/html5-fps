@@ -11,15 +11,16 @@ import {
 
 const DUMMY_VECTOR = Vector3.Zero()
 
-const WALK_SPEED = 0.5
+const WALK_SPEED = 10
 
 /**
  *
  * @param {UniversalCamera} camera
+ * @param {number} deltaTime
  * @param {Vector3} direction
  */
-const moveCamPos = (camera, direction) => camera.position.addInPlace(
-    direction.rotateByQuaternionToRef(camera.rotation.toQuaternion(), DUMMY_VECTOR).scaleInPlace(WALK_SPEED)
+const moveCamPos = (camera, deltaTime, direction) => camera.position.addInPlace(
+    direction.rotateByQuaternionToRef(camera.rotation.toQuaternion(), DUMMY_VECTOR).scaleInPlace(WALK_SPEED * deltaTime / 1000)
 )
 
 class Game extends React.Component {
@@ -71,17 +72,18 @@ class Game extends React.Component {
             camera.rotation.x += 1 / 50 * (mousePosX - prevMousePosX)
             camera.rotation.y += 1 / 50 * (mousePosY - prevMousePosY)
 
+            const deltaTime = this.engine.getDeltaTime()
             if (this.keysDown.w) {
-                moveCamPos(camera, Vector3.Forward())
+                moveCamPos(camera, deltaTime, Vector3.Forward())
             }
             if (this.keysDown.a) {
-                moveCamPos(camera, Vector3.Left())
+                moveCamPos(camera, deltaTime, Vector3.Left())
             }
             if (this.keysDown.s) {
-                moveCamPos(camera, Vector3.Backward())
+                moveCamPos(camera, deltaTime, Vector3.Backward())
             }
             if (this.keysDown.d) {
-                moveCamPos(camera, Vector3.Right())
+                moveCamPos(camera, deltaTime, Vector3.Right())
             }
 
             camera.position.y = 5
