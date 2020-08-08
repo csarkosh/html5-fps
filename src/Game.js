@@ -9,6 +9,19 @@ import {
     Vector3
 } from '@babylonjs/core'
 
+const DUMMY_VECTOR = Vector3.Zero()
+
+const WALK_SPEED = 0.5
+
+/**
+ *
+ * @param {UniversalCamera} camera
+ * @param {Vector3} direction
+ */
+const moveCamPos = (camera, direction) => camera.position.addInPlace(
+    direction.rotateByQuaternionToRef(camera.rotation.toQuaternion(), DUMMY_VECTOR).scaleInPlace(WALK_SPEED)
+)
+
 class Game extends React.Component {
     /** @type {React.Ref} */
     canvas = React.createRef()
@@ -57,6 +70,20 @@ class Game extends React.Component {
             const mousePosY = scene.pointerY
             camera.rotation.x += 1 / 50 * (mousePosX - prevMousePosX)
             camera.rotation.y += 1 / 50 * (mousePosY - prevMousePosY)
+
+            if (this.keysDown.w) {
+                moveCamPos(camera, Vector3.Forward())
+            }
+            if (this.keysDown.a) {
+                moveCamPos(camera, Vector3.Left())
+            }
+            if (this.keysDown.s) {
+                moveCamPos(camera, Vector3.Backward())
+            }
+            if (this.keysDown.d) {
+                moveCamPos(camera, Vector3.Right())
+            }
+
             camera.position.y = 5
             scene.render()
             prevMousePosX = mousePosX
