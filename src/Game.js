@@ -76,16 +76,16 @@ class Game extends React.Component {
             camera.position.y = 5
             camera.rotation.x += ROTATION_SPEED * deltaTime * (mousePosX - prevMousePosX)
             camera.rotation.y += ROTATION_SPEED * deltaTime * (mousePosY - prevMousePosY)
-            if (this.keysDown.w) {
+            if (this.keysDown.KeyW) {
                 translateCamPos(camera, deltaTime, Vector3.Forward())
             }
-            if (this.keysDown.a) {
+            if (this.keysDown.KeyA) {
                 translateCamPos(camera, deltaTime, Vector3.Left())
             }
-            if (this.keysDown.s) {
+            if (this.keysDown.KeyS) {
                 translateCamPos(camera, deltaTime, Vector3.Backward())
             }
-            if (this.keysDown.d) {
+            if (this.keysDown.KeyD) {
                 translateCamPos(camera, deltaTime, Vector3.Right())
             }
 
@@ -100,9 +100,9 @@ class Game extends React.Component {
         window.removeEventListener('keyup', this.handleKeyUp)
     }
 
-    handleKeyDown = e => this.keysDown[e.key] = true
+    handleKeyDown = e => this.keysDown[e.code] = true
 
-    handleKeyUp = e => delete this.keysDown[e.key]
+    handleKeyUp = e => delete this.keysDown[e.code]
 
     onPlay = e => {
         this.engine.enterFullscreen(true)
