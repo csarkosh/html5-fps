@@ -39,16 +39,8 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
-        window.document.addEventListener(
-            'keydown',
-            e => this.keysDown[e.key] = true,
-            { passive: true }
-        )
-        window.document.addEventListener(
-            'keyup',
-            e => delete this.keysDown[e.key],
-            { passive: true }
-        )
+        window.document.addEventListener('keydown', this.handleKeyDown, { passive: true })
+        window.document.addEventListener('keyup', this.handleKeyUp, { passive: true })
 
         this.engine = new Engine(this.canvas.current)
         const scene = new Scene(this.engine)
@@ -61,14 +53,16 @@ class Game extends React.Component {
         light.intensity = 0.7
         const sphere = Mesh.CreateSphere('sphere1', 16, 2, scene)
         sphere.position.y = 2
-        MeshBuilder.CreateGround('ground', { height: 15, width: 15, subdivisions: 2 })
+        MeshBuilder.CreateGround('ground', { height: 50, width: 40, subdivisions: 2 })
 
         let prevMousePosX = null
         let prevMousePosY = null
         scene.render()
         this.engine.runRenderLoop(() => {
+            const deltaTime = this.engine.getDeltaTime() / 1000
+
             if (!this.engine.isFullscreen) {
-                prevMousePosX = prevMousePosY = 0
+                prevMousePosX = prevMousePosY = null
                 return
             } else if (prevMousePosX === null) {
                 prevMousePosX = scene.pointerX
@@ -79,7 +73,6 @@ class Game extends React.Component {
             // Update movement & rotation
             const mousePosX = scene.pointerX
             const mousePosY = scene.pointerY
-            const deltaTime = this.engine.getDeltaTime() / 1000
             camera.position.y = 5
             camera.rotation.x += ROTATION_SPEED * deltaTime * (mousePosX - prevMousePosX)
             camera.rotation.y += ROTATION_SPEED * deltaTime * (mousePosY - prevMousePosY)
@@ -101,6 +94,15 @@ class Game extends React.Component {
             prevMousePosY = mousePosY
         })
     }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleKeyDown)
+        window.removeEventListener('keyup', this.handleKeyUp)
+    }
+
+    handleKeyDown = e => this.keysDown[e.key] = true
+
+    handleKeyUp = e => delete this.keysDown[e.key]
 
     onPlay = e => {
         this.engine.enterFullscreen(true)
