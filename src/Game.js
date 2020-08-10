@@ -11,7 +11,7 @@ import {
 
 const DUMMY_VECTOR = Vector3.Zero()
 
-const WALK_SPEED = 10
+const WALK_SPEED = 13
 
 /**
  *
@@ -30,6 +30,10 @@ class Game extends React.Component {
     engine = null
     /** @type {Object.<String, Boolean>} */
     keysDown = {}
+
+    state = {
+        playButtonText: 'Play'
+    }
 
     componentDidMount() {
         window.document.addEventListener(
@@ -95,6 +99,7 @@ class Game extends React.Component {
 
     onPlay = e => {
         this.engine.enterFullscreen(true)
+        this.setState({ playButtonText: 'Resume' })
     }
 
     render() {
@@ -106,7 +111,7 @@ class Game extends React.Component {
                         onClick={this.onPlay}
                         onTouchEnd={this.onPlay}
                     >
-                        Play
+                        {this.state.playButtonText}
                     </button>
                     <button
                         className="btn btn-primary btn-xl"
