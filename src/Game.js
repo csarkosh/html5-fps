@@ -10,18 +10,21 @@ import {
 } from '@babylonjs/core'
 
 const DUMMY_VECTOR = Vector3.Zero()
-
 const WALK_SPEED = 13
+const ROTATION_SPEED = 1 / 50
 
 /**
+ * Translate camera position relative to its rotation
  *
  * @param {UniversalCamera} camera
  * @param {number} deltaTime
  * @param {Vector3} direction
+ * @return {Vector3}
  */
-const moveCamPos = (camera, deltaTime, direction) => camera.position.addInPlace(
-    direction.rotateByQuaternionToRef(camera.rotation.toQuaternion(), DUMMY_VECTOR).scaleInPlace(WALK_SPEED * deltaTime / 1000)
-)
+const translateCamPos = (camera, deltaTime, direction) => camera.position.addInPlace(
+    direction
+        .rotateByQuaternionToRef(camera.rotation.toQuaternion(), DUMMY_VECTOR)
+        .scaleInPlace(WALK_SPEED * deltaTime))
 
 class Game extends React.Component {
     /** @type {React.Ref} */
@@ -65,32 +68,34 @@ class Game extends React.Component {
         scene.render()
         this.engine.runRenderLoop(() => {
             if (!this.engine.isFullscreen) {
+                prevMousePosX = prevMousePosY = 0
                 return
             } else if (prevMousePosX === null) {
                 prevMousePosX = scene.pointerX
                 prevMousePosY = scene.pointerY
                 return
             }
+
+            // Update movement & rotation
             const mousePosX = scene.pointerX
             const mousePosY = scene.pointerY
-            camera.rotation.x += 1 / 50 * (mousePosX - prevMousePosX)
-            camera.rotation.y += 1 / 50 * (mousePosY - prevMousePosY)
-
-            const deltaTime = this.engine.getDeltaTime()
+            const deltaTime = this.engine.getDeltaTime() / 1000
+            camera.position.y = 5
+            camera.rotation.x += ROTATION_SPEED * deltaTime * (mousePosX - prevMousePosX)
+            camera.rotation.y += ROTATION_SPEED * deltaTime * (mousePosY - prevMousePosY)
             if (this.keysDown.w) {
-                moveCamPos(camera, deltaTime, Vector3.Forward())
+                translateCamPos(camera, deltaTime, Vector3.Forward())
             }
             if (this.keysDown.a) {
-                moveCamPos(camera, deltaTime, Vector3.Left())
+                translateCamPos(camera, deltaTime, Vector3.Left())
             }
             if (this.keysDown.s) {
-                moveCamPos(camera, deltaTime, Vector3.Backward())
+                translateCamPos(camera, deltaTime, Vector3.Backward())
             }
             if (this.keysDown.d) {
-                moveCamPos(camera, deltaTime, Vector3.Right())
+                translateCamPos(camera, deltaTime, Vector3.Right())
             }
 
-            camera.position.y = 5
             scene.render()
             prevMousePosX = mousePosX
             prevMousePosY = mousePosY
