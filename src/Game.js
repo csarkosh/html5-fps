@@ -6,7 +6,7 @@ import {
     MeshBuilder,
     Scene,
     UniversalCamera,
-    Vector3
+    Vector3,
 } from '@babylonjs/core'
 
 const DUMMY_VECTOR = Vector3.Zero()
@@ -33,6 +33,8 @@ class Game extends React.Component {
     engine = null
     /** @type {Object.<String, Boolean>} */
     keysDown = {}
+
+    isTouchDevice = false
 
     state = {
         playButtonText: 'Play'
@@ -64,7 +66,8 @@ class Game extends React.Component {
             if (!this.engine.isFullscreen) {
                 prevMousePosX = prevMousePosY = null
                 return
-            } else if (prevMousePosX === null) {
+            }
+            if (!this.isTouchDevice && prevMousePosX === null) {
                 prevMousePosX = scene.pointerX
                 prevMousePosY = scene.pointerY
                 return
@@ -73,20 +76,24 @@ class Game extends React.Component {
             // Update movement & rotation
             const mousePosX = scene.pointerX
             const mousePosY = scene.pointerY
-            camera.position.y = 5
-            camera.rotation.x += ROTATION_SPEED * deltaTime * (mousePosX - prevMousePosX)
-            camera.rotation.y += ROTATION_SPEED * deltaTime * (mousePosY - prevMousePosY)
-            if (this.keysDown.KeyW) {
-                translateCamPos(camera, deltaTime, Vector3.Forward())
-            }
-            if (this.keysDown.KeyA) {
-                translateCamPos(camera, deltaTime, Vector3.Left())
-            }
-            if (this.keysDown.KeyS) {
-                translateCamPos(camera, deltaTime, Vector3.Backward())
-            }
-            if (this.keysDown.KeyD) {
-                translateCamPos(camera, deltaTime, Vector3.Right())
+            if (this.isTouchDevice) {
+
+            } else {
+                camera.position.y = 5
+                camera.rotation.x += ROTATION_SPEED * deltaTime * (mousePosX - prevMousePosX)
+                camera.rotation.y += ROTATION_SPEED * deltaTime * (mousePosY - prevMousePosY)
+                if (this.keysDown.KeyW) {
+                    translateCamPos(camera, deltaTime, Vector3.Forward())
+                }
+                if (this.keysDown.KeyA) {
+                    translateCamPos(camera, deltaTime, Vector3.Left())
+                }
+                if (this.keysDown.KeyS) {
+                    translateCamPos(camera, deltaTime, Vector3.Backward())
+                }
+                if (this.keysDown.KeyD) {
+                    translateCamPos(camera, deltaTime, Vector3.Right())
+                }
             }
 
             scene.render()
@@ -96,8 +103,8 @@ class Game extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeyDown)
-        window.removeEventListener('keyup', this.handleKeyUp)
+        window.document.removeEventListener('keydown', this.handleKeyDown)
+        window.document.removeEventListener('keyup', this.handleKeyUp)
     }
 
     handleKeyDown = e => this.keysDown[e.code] = true
@@ -109,6 +116,8 @@ class Game extends React.Component {
         this.setState({ playButtonText: 'Resume' })
     }
 
+    onPlayTouch = () => this.isTouchDevice = true;
+
     render() {
         return (
             <div className="overlay-container">
@@ -116,7 +125,7 @@ class Game extends React.Component {
                     <button
                         className="btn btn-primary btn-xl"
                         onClick={this.onPlay}
-                        onTouchEnd={this.onPlay}
+                        onTouchStart={this.onPlayTouch}
                     >
                         {this.state.playButtonText}
                     </button>
