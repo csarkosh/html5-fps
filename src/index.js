@@ -6,6 +6,15 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+Number.prototype.clamp = function(min, max) {
+    return Math.min(Math.max(this, min), max);
+};
+
 ReactDOM.render(
     <React.StrictMode>
         <App />
