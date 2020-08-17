@@ -3,7 +3,7 @@ import {
     Mesh,
     MeshBuilder, PointerEventTypes,
     Scene,
-    UniversalCamera,
+    UniversalCamera, Vector2,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
@@ -26,6 +26,8 @@ class Game {
     #isTouchDevice = false
     /** @type {Object.<String, Boolean>} */
     #keysDown = {}
+    /** @type {Container} */
+    #moveStickContainer = null
     /** @type {Container} */
     #moveStickPoint = null
     /** @type {number} */
@@ -53,7 +55,6 @@ class Game {
         camera.setTarget(Vector3.Zero())
         camera.attachControl(canvas, true)
         camera.inputs.remove(camera.inputs.attached.touch)
-        camera.inertia = 0
         camera.rotation = Vector3.Zero()
         this.#camera = camera
         const light = new HemisphericLight('light1', Vector3.Up(), this.#scene)
@@ -64,7 +65,6 @@ class Game {
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
         this.setTouchDevice(this.#isTouchDevice)
         this.#scene.render()
-        window.camera = this.#camera
     }
 
     #onKeyDown = e => this.#keysDown[e.code] = true
@@ -86,7 +86,7 @@ class Game {
         if (this.#isTouchDevice) {
             if (this.#isMoveStickDown) {
                 const moveDirection = Vector3.Zero()
-                moveDirection.z = this.#moveStickPoint.topInPixels * -1
+                moveDirection.z = -1 * this.#moveStickPoint.topInPixels
                 moveDirection.x = this.#moveStickPoint.leftInPixels
                 moveDirection.normalize()
                 const directionalMovement = moveDirection
@@ -140,41 +140,55 @@ class Game {
         if (this.#isTouchDevice) {
             window.document.removeEventListener('keydown', this.#onKeyDown)
             window.document.removeEventListener('keyup', this.#onKeyUp)
+            this.#camera.inertia = 2
+            this.#createMoveStick()
             this.#touchDeviceObserver = this.#scene.onPointerObservable.add(info => {
                 if (info.type === PointerEventTypes.POINTERDOWN && !this.#touchInfo.id) {
                     this.#touchInfo.id = info.event.pointerId
                     this.#touchInfo.posX = this.#scene.pointerX
                     this.#touchInfo.posY = this.#scene.pointerY
                 }
-
-                if (this.#touchInfo.id !== info.event.pointerId) return;
-
-                if (info.type === PointerEventTypes.POINTERUP) {
-                    delete this.#touchInfo.id
-                    delete this.#touchInfo.posX
-                    delete this.#touchInfo.posY
-                } else if (info.type === PointerEventTypes.POINTERMOVE) {
-                    const timeDelta = this.#engine.getDeltaTime() / 1000
-                    const posX = this.#scene.pointerX
-                    const posY = this.#scene.pointerY
-                    const rotSpeed = Game.#TOUCH_ROTATION_SPEED * timeDelta;
-                    // Translation between touch screen coordinates and camera rotation
-                    // coordinates are inverse of each other
-                    this.#camera.rotation.x += rotSpeed * (posY - this.#touchInfo.posY)
-                    this.#camera.rotation.y += -1 * rotSpeed * (posX - this.#touchInfo.posX)
-                    this.#touchInfo.posX = posX
-                    this.#touchInfo.posY = posY
+                if (this.#touchInfo.id === info.event.pointerId) {
+                    if (info.type === PointerEventTypes.POINTERUP) {
+                        delete this.#touchInfo.id
+                        delete this.#touchInfo.posX
+                        delete this.#touchInfo.posY
+                    } else if (info.type === PointerEventTypes.POINTERMOVE) {
+                        const timeDelta = this.#engine.getDeltaTime() / 1000
+                        const posX = this.#scene.pointerX
+                        const posY = this.#scene.pointerY
+                        const rotSpeed = Game.#TOUCH_ROTATION_SPEED * timeDelta;
+                        // Translation between touch screen coordinates and camera rotation
+                        // coordinates are inverse of each other
+                        this.#camera.rotation.x += rotSpeed * (posY - this.#touchInfo.posY)
+                        this.#camera.rotation.y += rotSpeed * (posX - this.#touchInfo.posX)
+                        this.#touchInfo.posX = posX
+                        this.#touchInfo.posY = posY
+                    }
+                } else if (info.type === PointerEventTypes.POINTERMOVE && this.#isMoveStickDown) {
+                    // Translate `moveStickPoint` to point of touch and clamp translation
+                    // to `moveStickContainer` circumference
+                    const radius = this.#moveStickContainer._currentMeasure.width / 2 - 5
+                    const { clientX, clientY } = info.event
+                    const left = (clientX - this.#moveStickContainer.centerX)
+                    const top = (clientY - this.#moveStickContainer.centerY)
+                    const magnitude = Math.sqrt(Math.pow(left, 2) + Math.pow(top, 2))
+                    const clampLeft = radius * left / magnitude
+                    const clampTop = radius * top / magnitude
+                    this.#moveStickPoint.left = left.clamp(-1 * clampLeft, clampLeft)
+                    this.#moveStickPoint.top = top.clamp(-1 * clampTop, clampTop)
                 }
             })
-            this.#createMoveStick()
         } else {
             window.document.addEventListener('keydown', this.#onKeyDown, { passive: true })
             window.document.addEventListener('keyup', this.#onKeyUp, { passive: true })
+            this.#camera.inertia = 0
             this.#scene.onPointerObservable.remove(this.#touchDeviceObserver)
         }
     }
 
     #createMoveStick = () => {
+        const diameter = 120
         const ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
         const container = new Ellipse()
         container.name = 'move-stick'
@@ -185,13 +199,13 @@ class Game {
         container.paddingRight = '0px'
         container.paddingTop = '0px'
         container.paddingBottom = '0px'
-        container.height = '120px'
-        container.width = '120px'
+        container.height = `${diameter}px`
+        container.width = `${diameter}px`
         container.isPointerBlocker = true
         container.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
         container.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM
-        container.left = Game.#MOVESTICK_LEFT_OFFSET
-        container.top = Game.#MOVESTICK_TOP_OFFSET
+        container.left = 30
+        container.top = -30
         ui.addControl(container)
         const inner = new Ellipse()
         inner.name = 'move-stick'
@@ -208,41 +222,28 @@ class Game {
         inner.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER
         inner.verticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER
         container.addControl(inner)
-        const radius = container._currentMeasure.width / 2
+        const radius = diameter / 2 - 5
         container.onPointerDownObservable.add(coordinates => {
-            window.container = container
-            window.inner = inner
-            window.ui = this.#ui
-            window.scene = this.#scene
-            inner.floatLeft = coordinates.x - (container._currentMeasure.width / 2) - Game.#MOVESTICK_LEFT_OFFSET
-            inner.left = inner.floatLeft
-            inner.floatTop = this.#ui._canvas.height - coordinates.y - (container._currentMeasure.height / 2) + Game.#MOVESTICK_TOP_OFFSET
-            inner.top = inner.floatTop * -1
+            inner.left = (coordinates.x - container.centerX)
+            inner.top  = (coordinates.y - container.centerY)
             this.#isMoveStickDown = true
-
-
-            const posX = (coordinates.x - container.centerX).clamp(-1 * radius, radius)
-            const posY = -1 * (coordinates.y - container.centerY).clamp(-1 * radius, radius)
-            console.log('old: <', inner.floatLeft.toFixed(2), ', ', inner.floatTop.toFixed(2), '>\nnew: <', posX.toFixed(2), ', ', posY.toFixed(2), '>')
         })
         container.onPointerMoveObservable.add(coordinates => {
-            inner.floatLeft = coordinates.x - (container._currentMeasure.width / 2) - Game.#MOVESTICK_LEFT_OFFSET
-            inner.left = inner.floatLeft
-            inner.floatTop = this.#ui._canvas.height - coordinates.y - (container._currentMeasure.height / 2) + Game.#MOVESTICK_TOP_OFFSET
-            inner.top = inner.floatTop * -1
-
-
-            const posX = (coordinates.x - container.centerX).clamp(-1 * radius, radius)
-            const posY = -1 * (coordinates.y - container.centerY).clamp(-1 * radius, radius)
-            console.log('old: <', inner.floatLeft.toFixed(2), ', ', inner.floatTop.toFixed(2), '>\nnew: <', posX.toFixed(2), ', ', posY.toFixed(2), '>')
+            const left = (coordinates.x - this.#moveStickContainer.centerX)
+            const top = (coordinates.y - this.#moveStickContainer.centerY)
+            const magnitude = Math.sqrt(Math.pow(left, 2) + Math.pow(top, 2))
+            const clampLeft = radius * left / magnitude
+            const clampTop = radius * top / magnitude
+            inner.left = left.clamp(-1 * clampLeft, clampLeft)
+            inner.top = top.clamp(-1 * clampTop, clampTop)
         })
         container.onPointerUpObservable.add(() => {
-            inner.isDown = false
             inner.left = inner.top = 0
             this.#isMoveStickDown = false
         })
         this.#ui = ui
         this.#moveStickPoint = inner
+        this.#moveStickContainer = container
     }
 
 }

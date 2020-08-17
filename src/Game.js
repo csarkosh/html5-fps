@@ -44,7 +44,7 @@ class Game extends React.Component {
                     <button
                         className="btn btn-primary btn-xl"
                     >
-                        Options
+                        Settings
                     </button>
                 </div>
                 <canvas

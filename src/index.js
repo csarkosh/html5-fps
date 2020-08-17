@@ -11,6 +11,7 @@ import * as serviceWorker from './serviceWorker';
  * @param {number} max
  * @return {number}
  */
+// eslint-disable-next-line no-extend-native
 Number.prototype.clamp = function(min, max) {
     return Math.min(Math.max(this, min), max);
 };
