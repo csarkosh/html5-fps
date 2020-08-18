@@ -13,7 +13,7 @@ function GameLauncher({ onBrowserLaunch, onInstall }) {
                     </button>
                 </div>
                 <button className="btn btn-link btn-link-sm" onClick={onBrowserLaunch}>
-                    Or launch in browser
+                    Or play in browser
                 </button>
             </div>
             <div className="launcher-support">
