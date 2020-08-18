@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'spectre.css';
 import './spectre.overrides.scss'
 import './index.scss';
+import './index.escaped.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

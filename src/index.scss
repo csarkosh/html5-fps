@@ -1,6 +1,9 @@
+:root {
+  --resolution: 9 / 16
+}
+
 body {
   margin: 0;
-  overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -19,11 +22,41 @@ canvas {
   width: 100vw;
 }
 
+header {
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+  & > section:first-child {
+    padding-left: calc(max(20px, env(safe-area-inset-left)));
+    padding-top: calc(max(4px, env(safe-area-inset-top)));
+  }
+}
+
+a, .btn.btn-link {
+  color: #3740ff;
+  &:visited, &:hover {
+    text-decoration: underline;
+  }
+  &:visited, &:hover, &:focus {
+    box-shadow: none;
+    color: #3740ff;
+  }
+}
+
+.fa-icon {
+  height: 2em;
+  width: 2em;
+  margin-bottom: -4px;
+  margin-right: -6px;
+}
+
 .svg-xl {
   height: 2em;
   margin-bottom: -4px;
   margin-right: -4px;
   width: 2em;
+}
+
+.row-reverse {
+  flex-direction: row-reverse;
 }
 
 .overlay-container {
@@ -44,4 +77,213 @@ canvas {
     }
 
   }
+}
+
+.store-wrapper {
+  margin: 16px auto 64px;
+  max-width: 992px;
+}
+
+.store-group {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 8px env(safe-area-inset-left) 0;
+  & > * {
+    margin: 8px;
+  }
+}
+
+.video-placeholder-static {
+  align-items: center;
+  background-color: black;
+  display: flex;
+  height: 360px;
+  justify-content: center;
+  width: 640px;
+}
+
+.video-placeholder-wrapper {
+  background-color: black;
+  width: 100%;
+}
+
+.video-placeholder {
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+}
+
+.video-placeholder-inner {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+@media screen and (max-width: 1032px) {
+  .video-placeholder-static {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1033px) {
+  .video-placeholder {
+    display: none;
+  }
+  .glance {
+    width: 320px;
+  }
+}
+
+.glance {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  & p {
+    margin: 0 0 8px;
+  }
+  & .m-bottom-4 {
+    margin-bottom: 4px;
+  }
+  & a > svg {
+    font-size: 10px;
+  }
+}
+
+.glance-description {
+  margin-left: 8px;
+  min-width: 320px;
+  width: 100%;
+}
+
+.glace-dev-grid {
+  display: grid;
+  font-size: 12px;
+  grid-template-columns: 120px 1fr;
+}
+
+.glace-genre {
+  border-radius: 4px;
+  cursor: default;
+  padding: 0 4px;
+  white-space: nowrap;
+  & + .glace-genre {
+    margin-left: 4px;
+  }
+}
+
+.launcher {
+  border-radius: 8px;
+  flex-grow: 1;
+  font-size: 21px;
+  margin-bottom: 32px;
+  padding: 16px 16px 26px;
+  position: relative;
+  width: 350px;
+}
+
+.launcher-action {
+  bottom: -40px;
+  font-size: 14px;
+  position: absolute;
+  right: 16px;
+  & > div:first-child {
+    border-radius: 3px;
+    padding: 3px;
+  }
+  & a {
+    font-size: 12px;
+  }
+}
+
+.launcher-price {
+  margin: 0 12px;
+}
+
+.launcher-support {
+  position: absolute;
+  right: 16px;
+  top: 6px;
+  & svg + svg {
+    margin-left: 4px;
+  }
+}
+
+.categories {
+  align-content: center;
+  cursor: default;
+  display: grid;
+  font-size: 12px;
+  gap: 4px 0;
+  grid-template-columns: 36px 1fr;
+  width: 290px;
+  & svg {
+    vertical-align: middle;
+  }
+  & .h-padding-6 {
+    padding: 2px 6px;
+  }
+}
+
+@keyframes indeterminate1 {
+  0% {
+    left: -35%;
+    right: 100%;
+  }
+  60% {
+     left: 100%;
+     right: -90%;
+  }
+  100% {
+    left: 100%;
+    right: -90%;
+  }
+}
+
+@keyframes indeterminate2 {
+  0% {
+    left: -200%;
+    right: 100%;
+  }
+  60% {
+     left: 107%;
+     right: -8%;
+  }
+  100% {
+    left: 107%;
+    right: -8%;
+  }
+}
+
+.linear-root {
+  height: 4px;
+  opacity: 0;
+  overflow: hidden;
+  position: relative;
+  transition: opacity 115ms cubic-bezier(0.1, 0.4, 1, 1) 0ms;
+  width: 100%;
+}
+
+.linear-bar {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform-origin: left;
+  transition: transform 0.2s linear;
+  width: auto;
+}
+
+.linear-indeterminate1 {
+  animation: indeterminate1 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}
+
+.linear-indeterminate2 {
+  animation: indeterminate2 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite;
 }

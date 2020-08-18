@@ -1,4 +1,24 @@
-.btn.btn-xl {
+.btn.btn-xl:not(.s-circle) {
     max-width: 225px;
     width: 100%;
+}
+
+.btn.btn-xl.s-circle {
+    height: 3rem;
+    width: 3rem;
+}
+
+.navbar {
+    background-color: white;
+    left: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.btn-link-sm {
+    font-size: 12px;
+    height: unset;
+    line-height: unset;
+    padding: 0;
 }

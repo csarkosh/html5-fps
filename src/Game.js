@@ -15,12 +15,17 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
+        window.document.querySelector('body').style.overflow = 'hidden'
         this.engine = new Engine(this.#canvas.current)
         this.game = new GameScene()
         this.game.init(this.#canvas.current, this.engine)
         this.engine.runRenderLoop(() => {
             this.game.update()
         })
+    }
+
+    componentWillUnmount() {
+        window.document.querySelector('body').style.overflow = 'auto'
     }
 
     onPlay = e => {

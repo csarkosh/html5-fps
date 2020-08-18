@@ -3,15 +3,13 @@ import {
     Mesh,
     MeshBuilder, PointerEventTypes,
     Scene,
-    UniversalCamera, Vector2,
+    UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 
 class Game {
     static #DUMMY_VECTOR = Vector3.Zero()
-    static #MOVESTICK_LEFT_OFFSET = 30
-    static #MOVESTICK_TOP_OFFSET = -30
     static #ROTATION_SPEED = 1 / 50
     static #TOUCH_ROTATION_SPEED = 1 / 6
     static #WALK_SPEED = 13

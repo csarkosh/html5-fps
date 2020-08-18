@@ -1,0 +1,7 @@
+/**
+ * Escaped styling for SASS's shortcomings
+ */
+
+.video-placeholder {
+    padding-top: min(360px, calc((var(--resolution) * 100%)));
+}
