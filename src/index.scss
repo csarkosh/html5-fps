@@ -85,17 +85,23 @@ a, .btn.btn-link {
 
 .store-wrapper {
   margin: 0 auto 64px;
-  max-width: 992px;
+  max-width: 1032px;
+  width: 100%;
 }
 
 .store-group {
   align-items: flex-start;
   display: flex;
   flex-wrap: wrap;
-  margin: 8px env(safe-area-inset-left) 0;
+  margin: 8px 0 0;
   & > * {
     margin: 8px;
   }
+}
+
+.h-safe-inset {
+  margin-left: env(safe-area-inset-left);
+  margin-right: env(safe-area-inset-right);
 }
 
 .video-placeholder-static {

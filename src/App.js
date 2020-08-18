@@ -48,7 +48,7 @@ function App() {
                             <VideoPreviewer />
                             <Glance />
                         </div>
-                        <div className="store-group">
+                        <div className="store-group h-safe-inset">
                             <GameLauncher
                                 onBrowserLaunch={() => {
                                     setState({ ...state, pathname: '/game', loading: true })

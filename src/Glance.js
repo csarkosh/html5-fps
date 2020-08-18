@@ -3,7 +3,7 @@ import {FaExternalLinkAlt} from "react-icons/fa";
 
 function Glance() {
     return (
-        <div className="glance">
+        <div className="glance h-safe-inset">
             <div className="glance-description">
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
