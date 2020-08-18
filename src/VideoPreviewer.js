@@ -19,7 +19,7 @@ function VideoPreviewer () {
                     </div>
                 </div>
             </div>
-            <div className="video-placeholder-static">
+            <div className="video-placeholder-static bg-dark">
                 <PlayButton />
             </div>
         </React.Fragment>

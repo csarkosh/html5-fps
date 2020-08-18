@@ -32,7 +32,7 @@ header {
 
 a, .btn.btn-link {
   color: #3740ff;
-  &:visited, &:hover {
+  &:hover {
     text-decoration: underline;
   }
   &:visited, &:hover, &:focus {
@@ -96,7 +96,6 @@ a, .btn.btn-link {
 
 .video-placeholder-static {
   align-items: center;
-  background-color: black;
   display: flex;
   height: 360px;
   justify-content: center;
