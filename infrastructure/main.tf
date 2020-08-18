@@ -65,6 +65,11 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = [local.domain_name]
   enabled = true
   default_root_object = "index.html"
+  custom_error_response {
+    response_page_path = "/index.html"
+    error_code = 404
+    response_code = 200
+  }
   origin {
     domain_name = aws_s3_bucket.webbucket.bucket_regional_domain_name
     origin_id = aws_s3_bucket.webbucket.id
