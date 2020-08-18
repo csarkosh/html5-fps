@@ -9,11 +9,7 @@
 }
 
 .navbar {
-    background-color: white;
-    left: 0;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    background-color: var(--backgroud-color);
 }
 
 .btn-link-sm {

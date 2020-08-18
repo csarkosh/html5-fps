@@ -15,6 +15,7 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
+        this.props.onMount && this.props.onMount()
         window.document.querySelector('body').style.overflow = 'hidden'
         this.engine = new Engine(this.#canvas.current)
         this.game = new GameScene()

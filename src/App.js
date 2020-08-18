@@ -4,22 +4,36 @@ import Glance from "./Glance";
 import GameLauncher from "./GameLauncher";
 import Categories from "./Categories";
 import LinearProgress from './LinearProgress'
-
 const Game = React.lazy(() => import('./Game'))
 
-class Loader extends React.Component {
-    static defaultProps = { onStart: () => {}, onDone: () => {} }
-    componentDidMount = () => this.props.onStart()
-    componentWillUnmount = () => this.props.onDone()
-    render = () => <React.Fragment />
+/**
+ * @param {object.<string, *>} state
+ * @param {function} setState
+ * @return {function}
+ */
+const popStateHandler = (state, setState) => () => setState({ ...state, pathname: window.location.pathname })
+
+const gameMountHandler = (state, setState) => () => {
+    setState({ ...state, loading: false })
+    window.history.pushState(null, null, '/game')
 }
 
-function App() {
-    const [status, setStatus] = React.useState()
+let listenersSet = false
 
+function App() {
+    const [state, setState] = React.useState({
+        pathname: window.document.location.pathname,
+        loading: false,
+    })
+    React.useEffect(() => {
+        if (!listenersSet) {
+            listenersSet = true
+            window.addEventListener('popstate', popStateHandler(state, setState), {passive: true})
+        }
+    }, [state, setState])
     return (
         <React.Fragment>
-            {status !== 'loaded' && (
+            {(state.pathname !== '/game' || state.loading) && (
                 <React.Fragment>
                     <header className="navbar">
                         <section className="navbar-section">
@@ -27,7 +41,7 @@ function App() {
                                 3D Web Game
                             </a>
                         </section>
-                        <LinearProgress style={{ opacity: status === 'loading' ? 1 : 0 }}/>
+                        <LinearProgress style={{ opacity: state.loading ? 1 : 0 }}/>
                     </header>
                     <div className="store-wrapper">
                         <div className="store-group">
@@ -36,7 +50,9 @@ function App() {
                         </div>
                         <div className="store-group">
                             <GameLauncher
-                                onBrowserLaunch={() => setStatus('loading')}
+                                onBrowserLaunch={() => {
+                                    setState({ ...state, pathname: '/game', loading: true })
+                                }}
                                 onInstall={() => {}}
                             />
                             <Categories />
@@ -44,16 +60,9 @@ function App() {
                     </div>
                 </React.Fragment>
             )}
-            {(status === 'loading' || status === 'loaded') && (
-                <React.Suspense
-                    fallback={
-                        <Loader onDone={() => {
-                            console.log('hello')
-                            setStatus('loaded')
-                        }} />
-                    }
-                >
-                    <Game />
+            {state.pathname === '/game' && (
+                <React.Suspense fallback={<React.Fragment />}>
+                    <Game onMount={gameMountHandler(state, setState)} />
                 </React.Suspense>
             )}
         </React.Fragment>
