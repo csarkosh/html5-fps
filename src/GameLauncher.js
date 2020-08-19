@@ -1,14 +1,15 @@
 import React from 'react'
 import {FaChrome, FaEdge, FaFirefox, FaSafari} from "react-icons/fa";
 
-function GameLauncher({ onBrowserLaunch, onInstall }) {
+function GameLauncher({ installEnabled, onBrowserLaunch, onInstall }) {
+    const enabled = installEnabled ? '' : 'disabled'
     return (
         <div className="launcher bg-secondary text-primary">
             Play 3D Web Game
             <div className="launcher-action">
                 <div className="bg-dark">
                     <span className="launcher-price">Free</span>
-                    <button className="btn btn-success disabled" onClick={onInstall}>
+                    <button className={`btn btn-success ${enabled}`} onClick={onInstall}>
                         Install Game
                     </button>
                 </div>

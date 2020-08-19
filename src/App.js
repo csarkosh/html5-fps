@@ -4,31 +4,52 @@ import Glance from "./Glance";
 import GameLauncher from "./GameLauncher";
 import Categories from "./Categories";
 import LinearProgress from './LinearProgress'
+import * as serviceWorker from './serviceWorker';
 const Game = React.lazy(() => import('./Game'))
 
 /**
- * @param {object.<string, *>} state
- * @param {function} setState
- * @return {function}
+ * @param {Object.<String, *>} state
+ * @param {Function} setState
+ * @return {Function}
  */
 const popStateHandler = (state, setState) => () => setState({ ...state, pathname: window.location.pathname })
 
+/**
+ * @param {Object.<String, *>} state
+ * @param {Function} setState
+ * @return {Function}
+ */
 const gameMountHandler = (state, setState) => () => {
     setState({ ...state, loading: false })
     window.history.pushState(null, null, '/game')
 }
 
+/**
+ * @param {Object.<String, *>} state
+ * @param {Function} setState
+ * @return {Function}
+ */
+const beforeInstallHandler = (state, setState) => e => setState({ ...state, installPrompt: e })
+
+
 let listenersSet = false
 
 function App() {
     const [state, setState] = React.useState({
-        pathname: window.document.location.pathname,
+        installPrompt: null,
         loading: false,
+        pathname: window.document.location.pathname,
     })
     React.useEffect(() => {
         if (!listenersSet) {
             listenersSet = true
+            if ((window.location.search || '').includes('sv')) {
+                serviceWorker.register();
+            } else {
+                serviceWorker.unregister();
+            }
             window.addEventListener('popstate', popStateHandler(state, setState), {passive: true})
+            window.addEventListener('beforeinstallprompt', beforeInstallHandler, {passive: true})
         }
     }, [state, setState])
     return (
@@ -50,6 +71,7 @@ function App() {
                         </div>
                         <div className="store-group h-safe-inset">
                             <GameLauncher
+                                installEnabled={Boolean(state.installPrompt)}
                                 onBrowserLaunch={() => {
                                     setState({ ...state, pathname: '/game', loading: true })
                                 }}

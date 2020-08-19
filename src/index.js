@@ -5,7 +5,6 @@ import './spectre.overrides.scss'
 import './index.scss';
 import './index.escaped.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
 /**
  * @param {number} min
@@ -23,12 +22,3 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-if ((window.location.search || '').includes('sv')) {
-    serviceWorker.register();
-} else {
-    serviceWorker.unregister();
-}
