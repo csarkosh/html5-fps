@@ -49,7 +49,7 @@ function App() {
                 serviceWorker.unregister();
             }
             window.addEventListener('popstate', popStateHandler(state, setState), {passive: true})
-            window.addEventListener('beforeinstallprompt', beforeInstallHandler, {passive: true})
+            window.addEventListener('beforeinstallprompt', beforeInstallHandler(state, setState), {passive: true})
         }
     }, [state, setState])
     return (
