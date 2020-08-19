@@ -75,7 +75,10 @@ function App() {
                                 onBrowserLaunch={() => {
                                     setState({ ...state, pathname: '/game', loading: true })
                                 }}
-                                onInstall={() => {}}
+                                onInstall={() => {
+                                    if (!state.installPrompt) return;
+                                    state.installPrompt.prompt()
+                                }}
                             />
                             <Categories />
                         </div>
