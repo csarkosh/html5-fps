@@ -31,7 +31,6 @@ const gameMountHandler = (state, setState) => () => {
  */
 const beforeInstallHandler = (state, setState) => e => setState({ ...state, installPrompt: e })
 
-
 let listenersSet = false
 
 function App() {

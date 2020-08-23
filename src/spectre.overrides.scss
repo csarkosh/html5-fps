@@ -18,3 +18,17 @@
     line-height: unset;
     padding: 0;
 }
+
+button.strike.disabled {
+    text-decoration: line-through;
+}
+
+.bg-error {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    background-color: #ffe0e0 !important;
+    border-radius: 4px;
+    color: #e85600;
+    padding-left: 4px;
+    padding-right: 4px;
+}
