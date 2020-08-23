@@ -31,6 +31,7 @@ class Game extends React.Component {
 
     onPlay = e => {
         this.engine.enterFullscreen(true)
+        this.engine.enterPointerlock()
         this.setState({ playButtonText: 'Resume' })
     }
 
@@ -55,6 +56,7 @@ class Game extends React.Component {
                 </div>
                 <canvas
                     height={720}
+                    onClick={() => window.document.querySelector('canvas').requestPointerLock()}
                     ref={this.#canvas}
                     width={1280}
                 />
