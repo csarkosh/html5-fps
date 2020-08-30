@@ -1,9 +1,9 @@
 import React from 'react'
 import {FaChrome, FaEdge, FaFirefox, FaSafari} from "react-icons/fa";
 
-const supportsFullscreen = Boolean(window.document.firstElementChild.requestFullscreen)
+const warning = false
 
-function GameLauncher({ installEnabled, onBrowserLaunch, onInstall }) {
+export default function GameLauncher({ installEnabled, onBrowserLaunch, onInstall }) {
     const enabled = installEnabled ? '' : 'disabled'
     return (
         <div className="launcher bg-secondary text-primary">
@@ -16,13 +16,15 @@ function GameLauncher({ installEnabled, onBrowserLaunch, onInstall }) {
                     </button>
                 </div>
                 <button
-                    className={`btn btn-link btn-link-sm strike ${supportsFullscreen ? undefined : 'disabled'}`}
+                    className={`btn btn-link btn-link-sm strike ${warning ? 'disabled' : ''}`}
                     onClick={onBrowserLaunch}
                 >
                     Or play in browser
                 </button>
-            {!supportsFullscreen && (
-                <div className="bg-error btn-link-sm">Your browser does not support fullscreen web games</div>
+            {warning && (
+                <div className="bg-error btn-link-sm">
+                    Your browser does not support fullscreen web games
+                </div>
             )}
             </div>
             <div className="launcher-support">
@@ -34,5 +36,3 @@ function GameLauncher({ installEnabled, onBrowserLaunch, onInstall }) {
         </div>
     )
 }
-
-export default GameLauncher

@@ -1,8 +1,8 @@
 import React from "react";
 import { Engine } from '@babylonjs/core'
-import GameScene from './scenes/Game'
+import GameScene from './scenes/GameScene'
 
-class Game extends React.Component {
+export default class Game extends React.Component {
     /** @type {React.Ref} */
     #canvas = React.createRef()
     /** @type {Engine} */
@@ -11,12 +11,16 @@ class Game extends React.Component {
     game = null
 
     state = {
+        isPlaying: false,
         playButtonText: 'Play'
     }
 
     componentDidMount() {
         this.props.onMount && this.props.onMount()
-        window.document.querySelector('body').style.overflow = 'hidden'
+        window.addEventListener('resize', this.onResize, { passive: true })
+        document.addEventListener('pointerlockchange', this.onPointerLockChange)
+        document.querySelector('body').style.overflow = 'hidden'
+        this.onResize()
         this.engine = new Engine(this.#canvas.current)
         this.game = new GameScene()
         this.game.init(this.#canvas.current, this.engine)
@@ -26,13 +30,35 @@ class Game extends React.Component {
     }
 
     componentWillUnmount() {
-        window.document.querySelector('body').style.overflow = 'auto'
+        window.removeEventListener('resize', this.onResize)
+        document.removeEventListener('pointerlockchange', this.onPointerLockChange)
+        document.querySelector('body').style.overflow = 'auto'
     }
 
-    onPlay = e => {
-        this.engine.enterFullscreen(true)
+    onPointerLockChange = () => {
+        const supportsPointerLock = (
+            this.#canvas.current.requestPointerLock
+            || this.#canvas.current.mozRequestPointerLock
+        )
+        const pointerLocked = document.pointerLockElement || document.mozPointerLockElement;
+        if (supportsPointerLock && !pointerLocked) {
+           this.game.pause()
+           this.setState({ isPlaying: false })
+        }
+    }
+
+    onResize = e => {
+        e && e.preventDefault()
+        this.#canvas.current.style.height = `${window.innerHeight}px`
+    }
+
+    onPlay = () => {
         this.engine.enterPointerlock()
-        this.setState({ playButtonText: 'Resume' })
+        this.game.play()
+        this.setState({
+            isPlaying: true,
+            playButtonText: 'Resume'
+        })
     }
 
     onPlayTouch = () => this.game.setTouchDevice(true)
@@ -40,7 +66,7 @@ class Game extends React.Component {
     render() {
         return (
             <div className="overlay-container">
-                <div>
+                <div style={{ zIndex: this.state.isPlaying ? -1 : 1 }}>
                     <button
                         className="btn btn-primary btn-xl"
                         onClick={this.onPlay}
@@ -56,7 +82,6 @@ class Game extends React.Component {
                 </div>
                 <canvas
                     height={720}
-                    onClick={() => window.document.querySelector('canvas').requestPointerLock()}
                     ref={this.#canvas}
                     width={1280}
                 />
@@ -64,5 +89,3 @@ class Game extends React.Component {
         )
     }
 }
-
-export default Game

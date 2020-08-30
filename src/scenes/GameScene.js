@@ -8,7 +8,7 @@ import {
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 
-class Game {
+export default class GameScene {
     static #DUMMY_VECTOR = Vector3.Zero()
     static #ROTATION_SPEED = 1 / 50
     static #TOUCH_ROTATION_SPEED = 1 / 6
@@ -20,6 +20,8 @@ class Game {
     #engine = null
     /** @type {boolean} */
     #isMoveStickDown = false
+    /** @type {boolean} */
+    #isPlaying = false
     /** @type {boolean} */
     #isTouchDevice = false
     /** @type {Object.<String, Boolean>} */
@@ -69,8 +71,12 @@ class Game {
 
     #onKeyUp = e => delete this.#keysDown[e.code]
 
+    pause = () => this.#isPlaying = false
+
+    play = () => this.#isPlaying = true
+
     update = () => {
-        if (!this.#engine.isFullscreen) {
+        if (!this.#isPlaying) {
             this.#prevMousePosX = this.#prevMousePosY = null
             return
         }
@@ -88,8 +94,8 @@ class Game {
                 moveDirection.x = this.#moveStickPoint.leftInPixels
                 moveDirection.normalize()
                 const directionalMovement = moveDirection
-                    .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), Game.#DUMMY_VECTOR)
-                    .scaleInPlace(Game.#WALK_SPEED * timeDelta)
+                    .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), GameScene.#DUMMY_VECTOR)
+                    .scaleInPlace(GameScene.#WALK_SPEED * timeDelta)
                 this.#camera
                     .position
                     .addInPlace(directionalMovement)
@@ -98,7 +104,7 @@ class Game {
             // Rotation
             const mousePosX = this.#scene.pointerX
             const mousePosY = this.#scene.pointerY
-            const rotSpeed = Game.#ROTATION_SPEED * timeDelta;
+            const rotSpeed = GameScene.#ROTATION_SPEED * timeDelta;
             this.#camera.rotation.x += rotSpeed * (mousePosX - this.#prevMousePosX)
             this.#camera.rotation.y += rotSpeed * (mousePosY - this.#prevMousePosY)
             // Movement
@@ -117,8 +123,8 @@ class Game {
             }
             moveDirection.normalize()
             const directionalMovement = moveDirection
-                .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), Game.#DUMMY_VECTOR)
-                .scaleInPlace(Game.#WALK_SPEED * timeDelta);
+                .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), GameScene.#DUMMY_VECTOR)
+                .scaleInPlace(GameScene.#WALK_SPEED * timeDelta);
             this.#camera
                 .position
                 .addInPlace(directionalMovement)
@@ -155,7 +161,7 @@ class Game {
                         const timeDelta = this.#engine.getDeltaTime() / 1000
                         const posX = this.#scene.pointerX
                         const posY = this.#scene.pointerY
-                        const rotSpeed = Game.#TOUCH_ROTATION_SPEED * timeDelta;
+                        const rotSpeed = GameScene.#TOUCH_ROTATION_SPEED * timeDelta;
                         // Translation between touch screen coordinates and camera rotation
                         // coordinates are inverse of each other
                         this.#camera.rotation.x += rotSpeed * (posY - this.#touchInfo.posY)
@@ -245,5 +251,3 @@ class Game {
     }
 
 }
-
-export default Game
