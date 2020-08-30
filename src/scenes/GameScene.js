@@ -226,7 +226,6 @@ export default class GameScene {
         inner.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER
         inner.verticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER
         container.addControl(inner)
-        const radius = diameter / 2 - 5
         container.onPointerDownObservable.add(coordinates => {
             inner.left = (coordinates.x - container.centerX)
             inner.top  = (coordinates.y - container.centerY)
@@ -235,11 +234,8 @@ export default class GameScene {
         container.onPointerMoveObservable.add(coordinates => {
             const left = (coordinates.x - this.#moveStickContainer.centerX)
             const top = (coordinates.y - this.#moveStickContainer.centerY)
-            const magnitude = Math.sqrt(Math.pow(left, 2) + Math.pow(top, 2))
-            const clampLeft = radius * left / magnitude
-            const clampTop = radius * top / magnitude
-            inner.left = left.clamp(-1 * clampLeft, clampLeft)
-            inner.top = top.clamp(-1 * clampTop, clampTop)
+            inner.left = left
+            inner.top = top
         })
         container.onPointerUpObservable.add(() => {
             inner.left = inner.top = 0
