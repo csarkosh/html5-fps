@@ -1,12 +1,21 @@
 import {
+    Color3,
     HemisphericLight,
     Mesh,
-    MeshBuilder, PointerEventTypes,
-    Scene,
+    MeshBuilder, PBRMaterial, PBRMetallicRoughnessMaterial, PointerEventTypes,
+    Scene, StandardMaterial, Texture,
     UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
+import { MixMaterial } from '@babylonjs/materials'
+import colorTxr from './Metal_Plate_024_basecolor.jpg'
+import normalTxr from './Metal_Plate_024_normal.jpg'
+import heightTxr from './Metal_Plate_024_height.png'
+import metallicTxr from './Metal_Plate_024_metallic.jpg'
+import roughnessTxr from './Metal_Plate_024_roughness.jpg'
+import occulsionTxr from './Metal_Plate_024_ambientOcclusion.jpg'
+
 
 export default class GameScene {
     static #DUMMY_VECTOR = Vector3.Zero()
@@ -51,17 +60,20 @@ export default class GameScene {
     init = (canvas, engine) => {
         this.#engine = engine
         this.#scene = new Scene(this.#engine)
+        this.#scene.ambientColor = new Color3(1, 1, 1)
         const camera = new UniversalCamera('user', new Vector3(0, 5, -10), this.#scene)
         camera.setTarget(Vector3.Zero())
         camera.attachControl(canvas, true)
         camera.inputs.remove(camera.inputs.attached.touch)
         camera.rotation = Vector3.Zero()
         this.#camera = camera
-        const light = new HemisphericLight('light1', Vector3.Up(), this.#scene)
+        const light = new HemisphericLight('light1', new Vector3(-1 , 1, 0), this.#scene)
         light.intensity = 0.7
         const sphere = Mesh.CreateSphere('sphere1', 16, 2, this.#scene)
         sphere.position.y = 2
         MeshBuilder.CreateGround('ground', { height: 50, width: 50, subdivisions: 2 })
+
+
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
         this.setTouchDevice(this.#isTouchDevice)
         this.#scene.render()
