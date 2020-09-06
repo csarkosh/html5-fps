@@ -16,6 +16,10 @@ import metallicRoughnessAoTxr from './Tiles_012_OCC_ROUGH_METAL.jpg'
 import basecolorTxr2 from './Stylized_Sci-fi_Wall_001_COLOR.jpg'
 import normalDisplacementTxr2 from './Stylized_Sci-fi_Wall_001_NRM_DSP.png'
 import metallicRoughnessAoTxr2 from './Stylized_Sci-fi_Wall_001_OCC_ROUGH_METAL.jpg'
+import basecolorTxr3 from './Ceiling_Gypsum_001_COLOR.jpg'
+import normalDisplacementTxr3 from './Ceiling_Gypsum_001_NRM_DSP.png'
+import metallicRoughnessAoTxr3 from './Ceiling_Gypsum_001_OCC_ROUGH_METAL.jpg'
+import emissiveTxr3 from './Ceiling_Gypsum_001_emissive.jpg'
 
 
 export default class GameScene {
@@ -91,11 +95,11 @@ export default class GameScene {
         ceiling.rotation = new Vector3(3 * Math.PI / 2, 0, 0)
 
 
-        const light = new HemisphericLight('light', Vector3.Down(), this.#scene)
-        light.diffuse = Color3.White()
-        light.specular = Color3.White()
-        light.groundColor = Color3.White()
-        light.intensity = 1
+        const light2 = new HemisphericLight('light2', Vector3.Down(), this.#scene)
+        light2.diffuse = Color3.White()
+        light2.specular = Color3.White()
+        light2.groundColor = Color3.White()
+        light2.intensity = 0.7
 
 
         const UV_SCALE = 20
@@ -140,32 +144,36 @@ export default class GameScene {
         pbr2.useParallax = true
         pbr2.parallaxScaleBias = 0.1
 
-
-        //const pbr3 = new PBRMaterial('pbr3', this.#scene)
-        //pbr3.albedoTexture = new Texture(basecolorTxr3, this.#scene)
-        //pbr3.bumpTexture = new Texture(normalDisplacementTxr3, this.#scene)
-        //pbr3.metallicTexture = new Texture(metallicRoughnessAoTxr3, this.#scene)
-        //pbr3.useRoughnessFromMetallicTextureAlpha = false
-        //pbr3.useMetallnessFromMetallicTextureBlue = true
-        //pbr3.useRoughnessFromMetallicTextureGreen = true
-        //pbr3.useAmbientOcclusionFromMetallicTextureRed = true
-        //pbr3.albedoTexture.uScale = UV_SCALE
-        //pbr3.albedoTexture.vScale = UV_SCALE
-        //pbr3.bumpTexture.uScale = UV_SCALE
-        //pbr3.bumpTexture.vScale = UV_SCALE
-        //pbr3.metallicTexture.uScale = UV_SCALE
-        //pbr3.metallicTexture.vScale = UV_SCALE
-        //pbr3.useRoughnessFromMetallicTextureAlpha = false
-        //pbr3.useMetallnessFromMetallicTextureBlue = true
-        //pbr3.useRoughnessFromMetallicTextureGreen = true
-        //pbr3.useAmbientOcclusionFromMetallicTextureRed = true
-        //pbr3.useParallax = true
-        //pbr3.parallaxScaleBias = 0.01
+        const pbr3 = new PBRMaterial('pbr3', this.#scene)
+        pbr3.albedoTexture = new Texture(basecolorTxr3, this.#scene)
+        pbr3.bumpTexture = new Texture(normalDisplacementTxr3, this.#scene)
+        pbr3.metallicTexture = new Texture(metallicRoughnessAoTxr3, this.#scene)
+        pbr3.emissiveTexture = new Texture(emissiveTxr3, this.#scene)
+        pbr3.useRoughnessFromMetallicTextureAlpha = false
+        pbr3.useMetallnessFromMetallicTextureBlue = true
+        pbr3.useRoughnessFromMetallicTextureGreen = true
+        pbr3.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr3.albedoTexture.uScale = 5
+        pbr3.albedoTexture.vScale = 5
+        pbr3.bumpTexture.uScale = 5
+        pbr3.bumpTexture.vScale = 5
+        pbr3.metallicTexture.uScale = 5
+        pbr3.metallicTexture.vScale = 5
+        pbr3.emissiveTexture.uScale = 5
+        pbr3.emissiveTexture.vScale = 5
+        pbr3.useRoughnessFromMetallicTextureAlpha = false
+        pbr3.useMetallnessFromMetallicTextureBlue = true
+        pbr3.useRoughnessFromMetallicTextureGreen = true
+        pbr3.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr3.useParallax = true
+        pbr3.parallaxScaleBias = 0.025
+        pbr3.emissiveColor = Color3.White()
+        pbr3.emissiveIntensity = 1
 
 
         ground.material = pbr1
         wall1.material = wall2.material = wall3.material = wall4.material = pbr2
-        //ceiling.material = pbr3
+        ceiling.material = pbr3
 
 
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
@@ -184,6 +192,7 @@ export default class GameScene {
     update = () => {
         if (!this.#isPlaying) {
             this.#prevMousePosX = this.#prevMousePosY = null
+            this.#scene.render()
             return
         }
         if (!this.#isTouchDevice && this.#prevMousePosX === null) {
