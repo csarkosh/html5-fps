@@ -10,19 +10,19 @@ import {
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
-import basecolorTxr from './Tiles_012_COLOR.jpg'
-import normalDisplacementTxr from './Tiles_012_NRM_DSP.png'
-import metallicRoughnessAoTxr from './Tiles_012_OCC_ROUGH_METAL.jpg'
-import basecolorTxr2 from './Stylized_Sci-fi_Wall_001_COLOR.jpg'
-import normalDisplacementTxr2 from './Stylized_Sci-fi_Wall_001_NRM_DSP.png'
-import metallicRoughnessAoTxr2 from './Stylized_Sci-fi_Wall_001_OCC_ROUGH_METAL.jpg'
-import basecolorTxr3 from './Ceiling_Gypsum_001_COLOR.jpg'
-import normalDisplacementTxr3 from './Ceiling_Gypsum_001_NRM_DSP.png'
-import metallicRoughnessAoTxr3 from './Ceiling_Gypsum_001_OCC_ROUGH_METAL.jpg'
-import emissiveTxr3 from './Ceiling_Gypsum_001_emissive.jpg'
+import basecolorTxr from '../textures/Tiles_012_COLOR.jpg'
+import normalDisplacementTxr from '../textures/Tiles_012_NRM_DSP.png'
+import metallicRoughnessAoTxr from '../textures/Tiles_012_OCC_ROUGH_METAL.jpg'
+import basecolorTxr2 from '../textures/Stylized_Sci-fi_Wall_001_COLOR.jpg'
+import normalDisplacementTxr2 from '../textures/Stylized_Sci-fi_Wall_001_NRM_DSP.png'
+import metallicRoughnessAoTxr2 from '../textures/Stylized_Sci-fi_Wall_001_OCC_ROUGH_METAL.jpg'
+import basecolorTxr3 from '../textures/Ceiling_Gypsum_001_COLOR.jpg'
+import normalDisplacementTxr3 from '../textures/Ceiling_Gypsum_001_NRM_DSP.png'
+import metallicRoughnessAoTxr3 from '../textures/Ceiling_Gypsum_001_OCC_ROUGH_METAL.jpg'
+import emissiveTxr3 from '../textures/Ceiling_Gypsum_001_emissive.jpg'
 
 
-export default class GameScene {
+export default class Scene1 {
     static #DUMMY_VECTOR = Vector3.Zero()
     static #ROTATION_SPEED = 1 / 50
     static #TOUCH_ROTATION_SPEED = 1 / 6
@@ -209,8 +209,8 @@ export default class GameScene {
                 moveDirection.x = this.#moveStickPoint.leftInPixels
                 moveDirection.normalize()
                 const directionalMovement = moveDirection
-                    .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), GameScene.#DUMMY_VECTOR)
-                    .scaleInPlace(GameScene.#WALK_SPEED * timeDelta)
+                    .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), Scene1.#DUMMY_VECTOR)
+                    .scaleInPlace(Scene1.#WALK_SPEED * timeDelta)
                 this.#camera
                     .position
                     .addInPlace(directionalMovement)
@@ -219,7 +219,7 @@ export default class GameScene {
             // Rotation
             const mousePosX = this.#scene.pointerX
             const mousePosY = this.#scene.pointerY
-            const rotSpeed = GameScene.#ROTATION_SPEED * timeDelta;
+            const rotSpeed = Scene1.#ROTATION_SPEED * timeDelta;
             this.#camera.rotation.x += rotSpeed * (mousePosX - this.#prevMousePosX)
             this.#camera.rotation.y += rotSpeed * (mousePosY - this.#prevMousePosY)
             // Movement
@@ -238,8 +238,8 @@ export default class GameScene {
             }
             moveDirection.normalize()
             const directionalMovement = moveDirection
-                .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), GameScene.#DUMMY_VECTOR)
-                .scaleInPlace(GameScene.#WALK_SPEED * timeDelta);
+                .rotateByQuaternionToRef(this.#camera.rotation.toQuaternion(), Scene1.#DUMMY_VECTOR)
+                .scaleInPlace(Scene1.#WALK_SPEED * timeDelta);
             this.#camera
                 .position
                 .addInPlace(directionalMovement)
@@ -276,7 +276,7 @@ export default class GameScene {
                         const timeDelta = this.#engine.getDeltaTime() / 1000
                         const posX = this.#scene.pointerX
                         const posY = this.#scene.pointerY
-                        const rotSpeed = GameScene.#TOUCH_ROTATION_SPEED * timeDelta;
+                        const rotSpeed = Scene1.#TOUCH_ROTATION_SPEED * timeDelta;
                         // Translation between touch screen coordinates and camera rotation
                         // coordinates are inverse of each other
                         this.#camera.rotation.x += rotSpeed * (posY - this.#touchInfo.posY)

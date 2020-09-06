@@ -1,10 +1,11 @@
 import React from 'react'; 
 import ReactDOM from 'react-dom';
 import 'spectre.css';
-import './spectre.overrides.scss'
-import './index.scss';
-import './index.escaped.css';
-import App from './App';
+import './site/spectre.overrides.scss'
+import './site/index.scss';
+import './site/index.escaped.css';
+import App from './site/App';
+import * as serviceWorker from './serviceWorker'
 
 /**
  * @param {number} min
@@ -22,3 +23,5 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
+
+serviceWorker.unregister()

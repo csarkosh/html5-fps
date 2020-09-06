@@ -1,13 +1,13 @@
 import React from "react";
 import { Engine } from '@babylonjs/core'
-import GameScene from './scenes/GameScene'
+import Scene1 from '../game/Scene1'
 
-export default class Game extends React.Component {
+export default class GameAdapter extends React.Component {
     /** @type {React.Ref} */
     #canvas = React.createRef()
     /** @type {Engine} */
     engine = null
-    /** @type {GameScene} */
+    /** @type {Scene1} */
     game = null
 
     state = {
@@ -22,7 +22,7 @@ export default class Game extends React.Component {
         document.querySelector('body').style.overflow = 'hidden'
         this.onResize()
         this.engine = new Engine(this.#canvas.current)
-        this.game = new GameScene()
+        this.game = new Scene1()
         this.game.init(this.#canvas.current, this.engine)
         this.engine.runRenderLoop(() => {
             this.game.update()

@@ -4,8 +4,7 @@ import Glance from "./Glance";
 import GameLauncher from "./GameLauncher";
 import Categories from "./Categories";
 import LinearProgress from './LinearProgress'
-import * as serviceWorker from './serviceWorker';
-const Game = React.lazy(() => import('./Game'))
+const Game = React.lazy(() => import('./GameAdapter'))
 
 /**
  * @param {Object.<String, *>} state
@@ -42,11 +41,6 @@ function App() {
     React.useEffect(() => {
         if (!listenersSet) {
             listenersSet = true
-            if ((window.location.search || '').includes('sv')) {
-                serviceWorker.register();
-            } else {
-                serviceWorker.unregister();
-            }
             window.addEventListener('popstate', popStateHandler(state, setState), {passive: true})
             window.addEventListener('beforeinstallprompt', beforeInstallHandler(state, setState), {passive: true})
         }
