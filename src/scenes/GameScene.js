@@ -1,12 +1,18 @@
 import {
     HemisphericLight,
-    Mesh,
-    MeshBuilder, PointerEventTypes,
+    MeshBuilder,
+    PBRMaterial,
+    PointerEventTypes,
     Scene,
+    Texture,
     UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
+import basecolorTxr from './Tiles_012_COLOR.jpg'
+import normalDisplacementTxr from './Tiles_012_NRM_DSP.png'
+import metallicRoughnessAoTxr from './Tiles_012_OCC_ROUGH_METAL.jpg'
+
 
 export default class GameScene {
     static #DUMMY_VECTOR = Vector3.Zero()
@@ -59,9 +65,54 @@ export default class GameScene {
         this.#camera = camera
         const light = new HemisphericLight('light1', Vector3.Up(), this.#scene)
         light.intensity = 0.7
-        const sphere = Mesh.CreateSphere('sphere1', 16, 2, this.#scene)
-        sphere.position.y = 2
-        MeshBuilder.CreateGround('ground', { height: 50, width: 50, subdivisions: 2 })
+        const ground = MeshBuilder.CreateGround('ground', { height: 100, width: 100, subdivisions: 1 })
+        ground.position = Vector3.Zero()
+        const wall1 = MeshBuilder.CreatePlane('wall1', { height: 15, width: 100 })
+        ground.addChild(wall1)
+        wall1.position = new Vector3(0, 2, 50)
+        wall1.rotation = Vector3.Zero()
+        const wall2 = MeshBuilder.CreatePlane('wall2', { height: 15, width: 100 })
+        ground.addChild(wall2)
+        wall2.position = new Vector3(50, 2, 0)
+        wall2.rotation = new Vector3(0, Math.PI / 2, 0)
+        const wall3 = MeshBuilder.CreatePlane('wall3', { height: 15, width: 100 })
+        ground.addChild(wall3)
+        wall3.position = new Vector3(0, 2, -50)
+        wall3.rotation = new Vector3(0, Math.PI, 0)
+        const wall4 = MeshBuilder.CreatePlane('wall4', { height: 15, width: 100 })
+        ground.addChild(wall4)
+        wall4.position = new Vector3(-50, 2, 0)
+        wall4.rotation = new Vector3(0, 3 * Math.PI / 2, 0)
+
+
+        const UV_SCALE = 20
+
+
+        const pbr1 = new PBRMaterial('pbr1', this.#scene)
+        pbr1.albedoTexture = new Texture(basecolorTxr, this.#scene)
+        pbr1.bumpTexture = new Texture(normalDisplacementTxr, this.#scene)
+        pbr1.metallicTexture = new Texture(metallicRoughnessAoTxr, this.#scene)
+        pbr1.useRoughnessFromMetallicTextureAlpha = false
+        pbr1.useMetallnessFromMetallicTextureBlue = true
+        pbr1.useRoughnessFromMetallicTextureGreen = true
+        pbr1.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr1.albedoTexture.uScale = UV_SCALE
+        pbr1.albedoTexture.vScale = UV_SCALE
+        pbr1.bumpTexture.uScale = UV_SCALE
+        pbr1.bumpTexture.vScale = UV_SCALE
+        pbr1.metallicTexture.uScale = UV_SCALE
+        pbr1.metallicTexture.vScale = UV_SCALE
+        pbr1.useRoughnessFromMetallicTextureAlpha = false
+        pbr1.useMetallnessFromMetallicTextureBlue = true
+        pbr1.useRoughnessFromMetallicTextureGreen = true
+        pbr1.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr1.useParallax = true
+        pbr1.parallaxScaleBias = 0.01
+
+
+        ground.material = pbr1
+
+
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
         this.setTouchDevice(this.#isTouchDevice)
         this.#scene.render()
