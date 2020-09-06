@@ -1,4 +1,5 @@
 import {
+    Color3,
     HemisphericLight,
     MeshBuilder,
     PBRMaterial,
@@ -12,6 +13,9 @@ import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 import basecolorTxr from './Tiles_012_COLOR.jpg'
 import normalDisplacementTxr from './Tiles_012_NRM_DSP.png'
 import metallicRoughnessAoTxr from './Tiles_012_OCC_ROUGH_METAL.jpg'
+import basecolorTxr2 from './Stylized_Sci-fi_Wall_001_COLOR.jpg'
+import normalDisplacementTxr2 from './Stylized_Sci-fi_Wall_001_NRM_DSP.png'
+import metallicRoughnessAoTxr2 from './Stylized_Sci-fi_Wall_001_OCC_ROUGH_METAL.jpg'
 
 
 export default class GameScene {
@@ -57,32 +61,41 @@ export default class GameScene {
     init = (canvas, engine) => {
         this.#engine = engine
         this.#scene = new Scene(this.#engine)
-        const camera = new UniversalCamera('user', new Vector3(0, 5, -10), this.#scene)
+        const camera = new UniversalCamera('user', new Vector3(0, 5, 0), this.#scene)
         camera.setTarget(Vector3.Zero())
         camera.attachControl(canvas, true)
         camera.inputs.remove(camera.inputs.attached.touch)
         camera.rotation = Vector3.Zero()
         this.#camera = camera
-        const light = new HemisphericLight('light1', Vector3.Up(), this.#scene)
-        light.intensity = 0.7
         const ground = MeshBuilder.CreateGround('ground', { height: 100, width: 100, subdivisions: 1 })
         ground.position = Vector3.Zero()
         const wall1 = MeshBuilder.CreatePlane('wall1', { height: 15, width: 100 })
         ground.addChild(wall1)
-        wall1.position = new Vector3(0, 2, 50)
+        wall1.position = new Vector3(0, 7.5, 50)
         wall1.rotation = Vector3.Zero()
         const wall2 = MeshBuilder.CreatePlane('wall2', { height: 15, width: 100 })
         ground.addChild(wall2)
-        wall2.position = new Vector3(50, 2, 0)
+        wall2.position = new Vector3(50, 7.5, 0)
         wall2.rotation = new Vector3(0, Math.PI / 2, 0)
         const wall3 = MeshBuilder.CreatePlane('wall3', { height: 15, width: 100 })
         ground.addChild(wall3)
-        wall3.position = new Vector3(0, 2, -50)
+        wall3.position = new Vector3(0, 7.5, -50)
         wall3.rotation = new Vector3(0, Math.PI, 0)
         const wall4 = MeshBuilder.CreatePlane('wall4', { height: 15, width: 100 })
         ground.addChild(wall4)
-        wall4.position = new Vector3(-50, 2, 0)
+        wall4.position = new Vector3(-50, 7.5, 0)
         wall4.rotation = new Vector3(0, 3 * Math.PI / 2, 0)
+        const ceiling = MeshBuilder.CreatePlane('ceiling', { height: 100, width: 100 })
+        ground.addChild(ceiling)
+        ceiling.position = new Vector3(0, 15, 0)
+        ceiling.rotation = new Vector3(3 * Math.PI / 2, 0, 0)
+
+
+        const light = new HemisphericLight('light', Vector3.Down(), this.#scene)
+        light.diffuse = Color3.White()
+        light.specular = Color3.White()
+        light.groundColor = Color3.White()
+        light.intensity = 1
 
 
         const UV_SCALE = 20
@@ -109,8 +122,50 @@ export default class GameScene {
         pbr1.useParallax = true
         pbr1.parallaxScaleBias = 0.01
 
+        const pbr2 = new PBRMaterial('pbr2', this.#scene)
+        pbr2.albedoTexture = new Texture(basecolorTxr2, this.#scene)
+        pbr2.bumpTexture = new Texture(normalDisplacementTxr2, this.#scene)
+        pbr2.metallicTexture = new Texture(metallicRoughnessAoTxr2, this.#scene)
+        pbr2.useRoughnessFromMetallicTextureAlpha = false
+        pbr2.useMetallnessFromMetallicTextureBlue = true
+        pbr2.useRoughnessFromMetallicTextureGreen = true
+        pbr2.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr2.albedoTexture.uScale = UV_SCALE
+        pbr2.bumpTexture.uScale = UV_SCALE
+        pbr2.metallicTexture.uScale = UV_SCALE
+        pbr2.useRoughnessFromMetallicTextureAlpha = false
+        pbr2.useMetallnessFromMetallicTextureBlue = true
+        pbr2.useRoughnessFromMetallicTextureGreen = true
+        pbr2.useAmbientOcclusionFromMetallicTextureRed = true
+        pbr2.useParallax = true
+        pbr2.parallaxScaleBias = 0.1
+
+
+        //const pbr3 = new PBRMaterial('pbr3', this.#scene)
+        //pbr3.albedoTexture = new Texture(basecolorTxr3, this.#scene)
+        //pbr3.bumpTexture = new Texture(normalDisplacementTxr3, this.#scene)
+        //pbr3.metallicTexture = new Texture(metallicRoughnessAoTxr3, this.#scene)
+        //pbr3.useRoughnessFromMetallicTextureAlpha = false
+        //pbr3.useMetallnessFromMetallicTextureBlue = true
+        //pbr3.useRoughnessFromMetallicTextureGreen = true
+        //pbr3.useAmbientOcclusionFromMetallicTextureRed = true
+        //pbr3.albedoTexture.uScale = UV_SCALE
+        //pbr3.albedoTexture.vScale = UV_SCALE
+        //pbr3.bumpTexture.uScale = UV_SCALE
+        //pbr3.bumpTexture.vScale = UV_SCALE
+        //pbr3.metallicTexture.uScale = UV_SCALE
+        //pbr3.metallicTexture.vScale = UV_SCALE
+        //pbr3.useRoughnessFromMetallicTextureAlpha = false
+        //pbr3.useMetallnessFromMetallicTextureBlue = true
+        //pbr3.useRoughnessFromMetallicTextureGreen = true
+        //pbr3.useAmbientOcclusionFromMetallicTextureRed = true
+        //pbr3.useParallax = true
+        //pbr3.parallaxScaleBias = 0.01
+
 
         ground.material = pbr1
+        wall1.material = wall2.material = wall3.material = wall4.material = pbr2
+        //ceiling.material = pbr3
 
 
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
