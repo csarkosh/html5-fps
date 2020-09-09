@@ -3,23 +3,21 @@ import {
     HemisphericLight,
     MeshBuilder,
     PBRMaterial,
-    PointerEventTypes,
+    PointerEventTypes, PointLight,
     Scene,
-    Texture,
+    Texture, TransformNode,
     UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
-import basecolorTxr from '../textures/Tiles_012_COLOR.jpg'
-import normalDisplacementTxr from '../textures/Tiles_012_NRM_DSP.png'
-import metallicRoughnessAoTxr from '../textures/Tiles_012_OCC_ROUGH_METAL.jpg'
-import basecolorTxr2 from '../textures/Stylized_Sci-fi_Wall_001_COLOR.jpg'
-import normalDisplacementTxr2 from '../textures/Stylized_Sci-fi_Wall_001_NRM_DSP.png'
-import metallicRoughnessAoTxr2 from '../textures/Stylized_Sci-fi_Wall_001_OCC_ROUGH_METAL.jpg'
-import basecolorTxr3 from '../textures/Ceiling_Gypsum_001_COLOR.jpg'
-import normalDisplacementTxr3 from '../textures/Ceiling_Gypsum_001_NRM_DSP.png'
-import metallicRoughnessAoTxr3 from '../textures/Ceiling_Gypsum_001_OCC_ROUGH_METAL.jpg'
-import emissiveTxr3 from '../textures/Ceiling_Gypsum_001_emissive.jpg'
+
+import basecolorTxr from '../textures/Metal_Plate_015_basecolor.jpg'
+import normalDisplacementTxr from '../textures/Metal_Plate_015_NRM_DSP.png'
+import metallicRoughnessAoTxr from '../textures/Metal_Plate_015_OCC_ROUGH_METAL.jpg'
+
+import basecolorTxr2 from '../textures/Metal_Plate_041_basecolor2.jpg'
+import normalDisplacementTxr2 from '../textures/Metal_Plate_041_NRM_DSP.png'
+import metallicRoughnessAoTxr2 from '../textures/Metal_Plate_041_OCC_ROUGH_METAL.jpg'
 
 
 export default class Scene1 {
@@ -71,35 +69,58 @@ export default class Scene1 {
         camera.inputs.remove(camera.inputs.attached.touch)
         camera.rotation = Vector3.Zero()
         this.#camera = camera
-        const ground = MeshBuilder.CreateGround('ground', { height: 100, width: 100, subdivisions: 1 })
-        ground.position = Vector3.Zero()
-        const wall1 = MeshBuilder.CreatePlane('wall1', { height: 15, width: 100 })
-        ground.addChild(wall1)
-        wall1.position = new Vector3(0, 7.5, 50)
+
+
+        const root = new TransformNode('root')
+        const ground = MeshBuilder.CreateGround('ground', { height: 50, width: 50, subdivisions: 1 })
+        ground.parent = root
+
+        const WALL_HEIGHT = 30
+        const WALL_WIDTH = 100
+        const wall1 = MeshBuilder.CreatePlane('wall1', { height: WALL_HEIGHT, width: WALL_WIDTH })
+        wall1.parent = root
+        wall1.position = new Vector3(0, WALL_HEIGHT / 2, 50)
         wall1.rotation = Vector3.Zero()
-        const wall2 = MeshBuilder.CreatePlane('wall2', { height: 15, width: 100 })
-        ground.addChild(wall2)
-        wall2.position = new Vector3(50, 7.5, 0)
+        const wall2 = MeshBuilder.CreatePlane('wall2', { height: WALL_HEIGHT, width: WALL_WIDTH })
+        wall2.parent = root
+        wall2.position = new Vector3(50, WALL_HEIGHT / 2, 0)
         wall2.rotation = new Vector3(0, Math.PI / 2, 0)
-        const wall3 = MeshBuilder.CreatePlane('wall3', { height: 15, width: 100 })
-        ground.addChild(wall3)
-        wall3.position = new Vector3(0, 7.5, -50)
+        const wall3 = MeshBuilder.CreatePlane('wall3', { height: WALL_HEIGHT, width: WALL_WIDTH })
+        wall3.parent = root
+        wall3.position = new Vector3(0, WALL_HEIGHT / 2, -50)
         wall3.rotation = new Vector3(0, Math.PI, 0)
-        const wall4 = MeshBuilder.CreatePlane('wall4', { height: 15, width: 100 })
-        ground.addChild(wall4)
-        wall4.position = new Vector3(-50, 7.5, 0)
+        const wall4 = MeshBuilder.CreatePlane('wall4', { height: WALL_HEIGHT, width: WALL_WIDTH })
+        wall4.parent = root
+        wall4.position = new Vector3(-50, WALL_HEIGHT / 2, 0)
         wall4.rotation = new Vector3(0, 3 * Math.PI / 2, 0)
-        const ceiling = MeshBuilder.CreatePlane('ceiling', { height: 100, width: 100 })
-        ground.addChild(ceiling)
-        ceiling.position = new Vector3(0, 15, 0)
-        ceiling.rotation = new Vector3(3 * Math.PI / 2, 0, 0)
 
+        const hemLight = new HemisphericLight('hemLight', Vector3.Down(), this.#scene)
+        hemLight.groundColor = Color3.Black()
+        hemLight.diffuse = Color3.Black()
+        hemLight.specular = Color3.White()
+        hemLight.intensity = 10
 
-        const light2 = new HemisphericLight('light2', Vector3.Down(), this.#scene)
+        const light = new PointLight('light', new Vector3(-25, 10, -25), this.#scene)
+        light.diffuse = Color3.White()
+        light.specular = Color3.White()
+        light.groundColor = Color3.White()
+        light.intensity = 20
+        light.parent = root
+
+        const light2 = new PointLight('light2', new Vector3(-25, 10, 25), this.#scene)
         light2.diffuse = Color3.White()
         light2.specular = Color3.White()
         light2.groundColor = Color3.White()
-        light2.intensity = 0.7
+        light2.intensity = 20
+        light2.parent = root
+
+        const light3 = new PointLight('light3', new Vector3(25, 10, 0), this.#scene)
+        light3.diffuse = Color3.White()
+        light3.specular = Color3.White()
+        light3.groundColor = Color3.White()
+        light3.intensity = 20
+        light3.parent = root
+
 
 
         const UV_SCALE = 20
@@ -126,6 +147,7 @@ export default class Scene1 {
         pbr1.useParallax = true
         pbr1.parallaxScaleBias = 0.01
 
+        const WALL_UV_SCALE = 2
         const pbr2 = new PBRMaterial('pbr2', this.#scene)
         pbr2.albedoTexture = new Texture(basecolorTxr2, this.#scene)
         pbr2.bumpTexture = new Texture(normalDisplacementTxr2, this.#scene)
@@ -134,9 +156,12 @@ export default class Scene1 {
         pbr2.useMetallnessFromMetallicTextureBlue = true
         pbr2.useRoughnessFromMetallicTextureGreen = true
         pbr2.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr2.albedoTexture.uScale = UV_SCALE
-        pbr2.bumpTexture.uScale = UV_SCALE
-        pbr2.metallicTexture.uScale = UV_SCALE
+        pbr2.albedoTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
+        pbr2.albedoTexture.vScale = WALL_UV_SCALE
+        pbr2.bumpTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
+        pbr2.bumpTexture.vScale = WALL_UV_SCALE
+        pbr2.metallicTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
+        pbr2.metallicTexture.vScale = WALL_UV_SCALE
         pbr2.useRoughnessFromMetallicTextureAlpha = false
         pbr2.useMetallnessFromMetallicTextureBlue = true
         pbr2.useRoughnessFromMetallicTextureGreen = true
@@ -144,36 +169,19 @@ export default class Scene1 {
         pbr2.useParallax = true
         pbr2.parallaxScaleBias = 0.1
 
-        const pbr3 = new PBRMaterial('pbr3', this.#scene)
-        pbr3.albedoTexture = new Texture(basecolorTxr3, this.#scene)
-        pbr3.bumpTexture = new Texture(normalDisplacementTxr3, this.#scene)
-        pbr3.metallicTexture = new Texture(metallicRoughnessAoTxr3, this.#scene)
-        pbr3.emissiveTexture = new Texture(emissiveTxr3, this.#scene)
-        pbr3.useRoughnessFromMetallicTextureAlpha = false
-        pbr3.useMetallnessFromMetallicTextureBlue = true
-        pbr3.useRoughnessFromMetallicTextureGreen = true
-        pbr3.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr3.albedoTexture.uScale = 5
-        pbr3.albedoTexture.vScale = 5
-        pbr3.bumpTexture.uScale = 5
-        pbr3.bumpTexture.vScale = 5
-        pbr3.metallicTexture.uScale = 5
-        pbr3.metallicTexture.vScale = 5
-        pbr3.emissiveTexture.uScale = 5
-        pbr3.emissiveTexture.vScale = 5
-        pbr3.useRoughnessFromMetallicTextureAlpha = false
-        pbr3.useMetallnessFromMetallicTextureBlue = true
-        pbr3.useRoughnessFromMetallicTextureGreen = true
-        pbr3.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr3.useParallax = true
-        pbr3.parallaxScaleBias = 0.025
-        pbr3.emissiveColor = Color3.White()
-        pbr3.emissiveIntensity = 1
-
-
         ground.material = pbr1
         wall1.material = wall2.material = wall3.material = wall4.material = pbr2
-        ceiling.material = pbr3
+
+        ground.position = new Vector3(25, 0, 0)
+        const offset = 25
+        for (let i = 0; i < 2; i++) {
+            for (let j = 0; j < 2; j++) {
+                const ground2 = ground.clone()
+                ground2.position = new Vector3(i * 50 - offset, 0, j * 50 - offset)
+            }
+        }
+        ground.isVisible = false
+
 
 
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
