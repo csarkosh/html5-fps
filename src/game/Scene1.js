@@ -2,23 +2,16 @@ import {
     Color3,
     HemisphericLight,
     MeshBuilder,
-    PBRMaterial,
-    PointerEventTypes, PointLight,
+    PointerEventTypes,
+    PointLight,
     Scene,
-    Texture, TransformNode,
+    TransformNode,
     UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 
-import basecolorTxr from '../textures/Metal_Plate_015_basecolor.jpg'
-import normalDisplacementTxr from '../textures/Metal_Plate_015_NRM_DSP.png'
-import metallicRoughnessAoTxr from '../textures/Metal_Plate_015_OCC_ROUGH_METAL.jpg'
-
-import basecolorTxr2 from '../textures/Metal_Plate_041_basecolor2.jpg'
-import normalDisplacementTxr2 from '../textures/Metal_Plate_041_NRM_DSP.png'
-import metallicRoughnessAoTxr2 from '../textures/Metal_Plate_041_OCC_ROUGH_METAL.jpg'
-
+import getMaterial from './textures'
 
 export default class Scene1 {
     static #DUMMY_VECTOR = Vector3.Zero()
@@ -75,7 +68,7 @@ export default class Scene1 {
         const ground = MeshBuilder.CreateGround('ground', { height: 50, width: 50, subdivisions: 1 })
         ground.parent = root
 
-        const WALL_HEIGHT = 30
+        const WALL_HEIGHT = 35
         const WALL_WIDTH = 100
         const wall1 = MeshBuilder.CreatePlane('wall1', { height: WALL_HEIGHT, width: WALL_WIDTH })
         wall1.parent = root
@@ -94,11 +87,11 @@ export default class Scene1 {
         wall4.position = new Vector3(-50, WALL_HEIGHT / 2, 0)
         wall4.rotation = new Vector3(0, 3 * Math.PI / 2, 0)
 
-        const hemLight = new HemisphericLight('hemLight', Vector3.Down(), this.#scene)
-        hemLight.groundColor = Color3.Black()
-        hemLight.diffuse = Color3.Black()
+        const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.#scene)
+        hemLight.groundColor = new Color3(36 / 255, 40 / 255, 60 / 255)
+        hemLight.diffuse = new Color3(196 / 255, 204 / 255, 255 / 255)
         hemLight.specular = Color3.White()
-        hemLight.intensity = 10
+        hemLight.intensity = 0.1
 
         const light = new PointLight('light', new Vector3(-25, 10, -25), this.#scene)
         light.diffuse = Color3.White()
@@ -121,53 +114,15 @@ export default class Scene1 {
         light3.intensity = 20
         light3.parent = root
 
-
-
-        const UV_SCALE = 20
-
-
-        const pbr1 = new PBRMaterial('pbr1', this.#scene)
-        pbr1.albedoTexture = new Texture(basecolorTxr, this.#scene)
-        pbr1.bumpTexture = new Texture(normalDisplacementTxr, this.#scene)
-        pbr1.metallicTexture = new Texture(metallicRoughnessAoTxr, this.#scene)
-        pbr1.useRoughnessFromMetallicTextureAlpha = false
-        pbr1.useMetallnessFromMetallicTextureBlue = true
-        pbr1.useRoughnessFromMetallicTextureGreen = true
-        pbr1.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr1.albedoTexture.uScale = UV_SCALE
-        pbr1.albedoTexture.vScale = UV_SCALE
-        pbr1.bumpTexture.uScale = UV_SCALE
-        pbr1.bumpTexture.vScale = UV_SCALE
-        pbr1.metallicTexture.uScale = UV_SCALE
-        pbr1.metallicTexture.vScale = UV_SCALE
-        pbr1.useRoughnessFromMetallicTextureAlpha = false
-        pbr1.useMetallnessFromMetallicTextureBlue = true
-        pbr1.useRoughnessFromMetallicTextureGreen = true
-        pbr1.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr1.useParallax = true
-        pbr1.parallaxScaleBias = 0.01
-
-        const WALL_UV_SCALE = 2
-        const pbr2 = new PBRMaterial('pbr2', this.#scene)
-        pbr2.albedoTexture = new Texture(basecolorTxr2, this.#scene)
-        pbr2.bumpTexture = new Texture(normalDisplacementTxr2, this.#scene)
-        pbr2.metallicTexture = new Texture(metallicRoughnessAoTxr2, this.#scene)
-        pbr2.useRoughnessFromMetallicTextureAlpha = false
-        pbr2.useMetallnessFromMetallicTextureBlue = true
-        pbr2.useRoughnessFromMetallicTextureGreen = true
-        pbr2.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr2.albedoTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
-        pbr2.albedoTexture.vScale = WALL_UV_SCALE
-        pbr2.bumpTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
-        pbr2.bumpTexture.vScale = WALL_UV_SCALE
-        pbr2.metallicTexture.uScale = WALL_UV_SCALE * WALL_WIDTH / WALL_HEIGHT
-        pbr2.metallicTexture.vScale = WALL_UV_SCALE
-        pbr2.useRoughnessFromMetallicTextureAlpha = false
-        pbr2.useMetallnessFromMetallicTextureBlue = true
-        pbr2.useRoughnessFromMetallicTextureGreen = true
-        pbr2.useAmbientOcclusionFromMetallicTextureRed = true
-        pbr2.useParallax = true
-        pbr2.parallaxScaleBias = 0.1
+        const pbr1 = getMaterial('Metal_Plate_15', 'floor1', this.#scene, {
+            parallaxScaleBias: 0.01,
+            uScale: 20,
+            vScale: 20,
+        })
+        const pbr2 = getMaterial('Metal_Plate_41', 'wall1', this.#scene, {
+            uScale: 2 * WALL_WIDTH / WALL_HEIGHT,
+            vScale: 2
+        })
 
         ground.material = pbr1
         wall1.material = wall2.material = wall3.material = wall4.material = pbr2
