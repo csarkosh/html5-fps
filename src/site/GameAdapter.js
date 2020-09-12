@@ -1,6 +1,6 @@
 import React from "react";
 import { Engine } from '@babylonjs/core'
-import Scene1 from '../game/Scene1'
+import Scene1 from '../game/scene1'
 
 export default class GameAdapter extends React.Component {
     /** @type {React.Ref} */

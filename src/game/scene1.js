@@ -11,7 +11,7 @@ import {
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 
-import getMaterial from './textures'
+import getMaterial from './create-pbr'
 
 export default class Scene1 {
     static #DUMMY_VECTOR = Vector3.Zero()

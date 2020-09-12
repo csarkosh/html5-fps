@@ -27,11 +27,16 @@ const getTexture = (src, scene) => {
 
 
 /**
+ * Creates and returns a PBR material.
+ *
+ * If an instance of the material already exists,
+ * then that material is returned instead.
  *
  * @param {string} texture
  * @param {string} name
  * @param {Scene} scene
  * @param {Object.<string, *>} opts
+ * @return {PBRMaterial}
  */
 export default (texture, name, scene, {
     uScale = 1,
