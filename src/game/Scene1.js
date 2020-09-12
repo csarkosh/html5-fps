@@ -89,9 +89,9 @@ export default class Scene1 {
 
         const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.#scene)
         hemLight.groundColor = new Color3(36 / 255, 40 / 255, 60 / 255)
-        hemLight.diffuse = new Color3(196 / 255, 204 / 255, 255 / 255)
+        hemLight.diffuse = new Color3(235 / 255, 225 / 255, 250 / 255)
         hemLight.specular = Color3.White()
-        hemLight.intensity = 0.1
+        hemLight.intensity = 0.4
 
         const light = new PointLight('light', new Vector3(-25, 10, -25), this.#scene)
         light.diffuse = Color3.White()
