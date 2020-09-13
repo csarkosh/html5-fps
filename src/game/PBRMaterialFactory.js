@@ -8,7 +8,7 @@ import {PBRMaterial, Texture} from "@babylonjs/core";
 
 
 export default class PBRMaterialFactory {
-    /** @type {Scene} */
+    /** @type {Scene1.js} */
     #scene = null
 
     /** @type {Object.<string, PBRMaterial>} */
@@ -18,7 +18,7 @@ export default class PBRMaterialFactory {
     #textureCache = {}
 
     /**
-     * @param {Scene} scene
+     * @param {Scene1.js} scene
      */
     constructor(scene) {
         this.#scene = scene

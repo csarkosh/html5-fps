@@ -1,16 +1,12 @@
 import {
-    Color3,
-    HemisphericLight,
-    MeshBuilder,
     PointerEventTypes,
-    PointLight,
     Scene,
-    TransformNode,
     UniversalCamera,
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
 import MaterialFactory from './PBRMaterialFactory'
+import RoomFactory from "./RoomFactory";
 
 export default class Scene1 {
     static #DUMMY_VECTOR = Vector3.Zero()
@@ -38,7 +34,7 @@ export default class Scene1 {
     #prevMousePosX = null
     /** @type {number} */
     #prevMousePosY = null
-    /** @type {Scene} */
+    /** @type {Scene1} */
     #scene = null
     /** @type {Observer} */
     #touchDeviceObserver = null
@@ -62,77 +58,8 @@ export default class Scene1 {
         camera.rotation = Vector3.Zero()
         this.#camera = camera
 
-
-        const root = new TransformNode('root')
-        const ground = MeshBuilder.CreateGround('ground', { height: 50, width: 50, subdivisions: 1 })
-        ground.parent = root
-
-        const WALL_HEIGHT = 35
-        const WALL_WIDTH = 100
-        const wall1 = MeshBuilder.CreatePlane('wall1', { height: WALL_HEIGHT, width: WALL_WIDTH })
-        wall1.parent = root
-        wall1.position = new Vector3(0, WALL_HEIGHT / 2, 50)
-        wall1.rotation = Vector3.Zero()
-        const wall2 = MeshBuilder.CreatePlane('wall2', { height: WALL_HEIGHT, width: WALL_WIDTH })
-        wall2.parent = root
-        wall2.position = new Vector3(50, WALL_HEIGHT / 2, 0)
-        wall2.rotation = new Vector3(0, Math.PI / 2, 0)
-        const wall3 = MeshBuilder.CreatePlane('wall3', { height: WALL_HEIGHT, width: WALL_WIDTH })
-        wall3.parent = root
-        wall3.position = new Vector3(0, WALL_HEIGHT / 2, -50)
-        wall3.rotation = new Vector3(0, Math.PI, 0)
-        const wall4 = MeshBuilder.CreatePlane('wall4', { height: WALL_HEIGHT, width: WALL_WIDTH })
-        wall4.parent = root
-        wall4.position = new Vector3(-50, WALL_HEIGHT / 2, 0)
-        wall4.rotation = new Vector3(0, 3 * Math.PI / 2, 0)
-
-        const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.#scene)
-        hemLight.groundColor = new Color3(36 / 255, 40 / 255, 60 / 255)
-        hemLight.diffuse = new Color3(235 / 255, 225 / 255, 250 / 255)
-        hemLight.specular = Color3.White()
-        hemLight.intensity = 0.4
-
-        const light = new PointLight('light', new Vector3(-25, 10, -25), this.#scene)
-        light.diffuse = Color3.White()
-        light.specular = Color3.White()
-        light.groundColor = Color3.White()
-        light.intensity = 20
-        light.parent = root
-
-        const light2 = new PointLight('light2', new Vector3(-25, 10, 25), this.#scene)
-        light2.diffuse = Color3.White()
-        light2.specular = Color3.White()
-        light2.groundColor = Color3.White()
-        light2.intensity = 20
-        light2.parent = root
-
-        const light3 = new PointLight('light3', new Vector3(25, 10, 0), this.#scene)
-        light3.diffuse = Color3.White()
-        light3.specular = Color3.White()
-        light3.groundColor = Color3.White()
-        light3.intensity = 20
-        light3.parent = root
-
-        const matFactory = new MaterialFactory(this.#scene)
-        const pbr1 = matFactory.create('Metal_Plate_15',
-            { pScale: 0.01, uScale: 20, vScale: 20 })
-        const pbr2 = matFactory.create('Metal_Plate_41',
-            { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
-
-        ground.material = pbr1
-        wall1.material = wall2.material = wall3.material = wall4.material = pbr2
-
-        ground.position = new Vector3(25, 0, 0)
-        const offset = 25
-        for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                const ground2 = ground.clone()
-                ground2.position = new Vector3(i * 50 - offset, 0, j * 50 - offset)
-            }
-        }
-        ground.isVisible = false
-
-
+        const roomFactory = new RoomFactory(this.#scene, new MaterialFactory(this.#scene))
+        roomFactory.create()
 
         this.#ui = AdvancedDynamicTexture.CreateFullscreenUI('ui')
         this.setTouchDevice(this.#isTouchDevice)
