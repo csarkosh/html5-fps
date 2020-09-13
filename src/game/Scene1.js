@@ -34,7 +34,7 @@ export default class Scene1 {
     #prevMousePosX = null
     /** @type {number} */
     #prevMousePosY = null
-    /** @type {Scene1} */
+    /** @type {Scene} */
     #scene = null
     /** @type {Observer} */
     #touchDeviceObserver = null
