@@ -10,8 +10,7 @@ import {
     Vector3,
 } from '@babylonjs/core'
 import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
-
-import getMaterial from './create-pbr'
+import MaterialFactory from './PBRMaterialFactory'
 
 export default class Scene1 {
     static #DUMMY_VECTOR = Vector3.Zero()
@@ -114,15 +113,11 @@ export default class Scene1 {
         light3.intensity = 20
         light3.parent = root
 
-        const pbr1 = getMaterial('Metal_Plate_15', 'floor1', this.#scene, {
-            parallaxScaleBias: 0.01,
-            uScale: 20,
-            vScale: 20,
-        })
-        const pbr2 = getMaterial('Metal_Plate_41', 'wall1', this.#scene, {
-            uScale: 2 * WALL_WIDTH / WALL_HEIGHT,
-            vScale: 2
-        })
+        const matFactory = new MaterialFactory(this.#scene)
+        const pbr1 = matFactory.create('Metal_Plate_15',
+            { pScale: 0.01, uScale: 20, vScale: 20 })
+        const pbr2 = matFactory.create('Metal_Plate_41',
+            { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
 
         ground.material = pbr1
         wall1.material = wall2.material = wall3.material = wall4.material = pbr2
