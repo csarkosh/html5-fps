@@ -7,11 +7,11 @@ export default class RoomFactory {
     /** @type {PBRMaterialFactory} */
     #matFactory = null
 
-    /** @type {Scene1.js} */
+    /** @type {Scene} */
     #scene = null
 
     /**
-     * @param {Scene1.js} scene
+     * @param {Scene} scene
      * @param {PBRMaterialFactory} pbrMaterialFactory
      */
     constructor(scene, pbrMaterialFactory) {
