@@ -1,5 +1,5 @@
 import { Scene } from '@babylonjs/core'
-import MaterialFactory from './PBRMaterialFactory'
+import MaterialFactory from './PBRMaterialFactory.ts'
 import RoomFactory from "./RoomFactory";
 import FPSController from './FPSController'
 
