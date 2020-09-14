@@ -49,6 +49,7 @@ export default class GameAdapter extends React.Component {
 
     onResize = e => {
         e && e.preventDefault()
+        this.engine && this.engine.resize()
         this.#canvas.current.style.height = `${window.innerHeight}px`
     }
 
@@ -82,6 +83,7 @@ export default class GameAdapter extends React.Component {
                 </div>
                 <canvas
                     height={720}
+                    id="game"
                     ref={this.#canvas}
                     width={1280}
                 />

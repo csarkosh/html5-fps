@@ -13,6 +13,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 code {
@@ -22,6 +25,9 @@ code {
 
 canvas {
   outline: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
   width: 100vw;
 }
 

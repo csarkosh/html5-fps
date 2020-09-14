@@ -23,7 +23,10 @@ export default class RoomFactory {
         const WALL_HEIGHT = 35
         const WALL_WIDTH = 100
         const root = new TransformNode('root', this.#scene)
-        const pbr2 = this.#matFactory.create('Metal_Plate_41', { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
+        const pbr1 = this.#matFactory.create('Metal_Plate_15',
+            { pScale: 0.01, uScale: 20, vScale: 20 });
+        const pbr2 = this.#matFactory.create('Metal_Plate_41',
+            { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
 
         // Create lighting
         const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.#scene)
@@ -36,7 +39,8 @@ export default class RoomFactory {
         this.#createPointLight(new Vector3(25, 10, 0), root)
 
         // Create walls
-        const wall1 = MeshBuilder.CreatePlane('wall1', { height: WALL_HEIGHT, width: WALL_WIDTH })
+        const wall1 = MeshBuilder.CreatePlane('wall1',
+            { height: WALL_HEIGHT, width: WALL_WIDTH })
         wall1.material = pbr2
         wall1.parent = root
         wall1.position = new Vector3(0, WALL_HEIGHT / 2, 50)
@@ -62,8 +66,9 @@ export default class RoomFactory {
         wall4.freezeWorldMatrix()
 
         // Create ground
-        const ground1 = MeshBuilder.CreateGround('ground1', { height: 50, width: 50, subdivisions: 1 })
-        ground1.material = this.#matFactory.create('Metal_Plate_15', {pScale: 0.01, uScale: 20, vScale: 20})
+        const ground1 = MeshBuilder.CreateGround('ground1',
+            { height: 50, width: 50, subdivisions: 1 })
+        ground1.material = pbr1
         ground1.parent = root
         ground1.position = new Vector3(-25, 0, -25)
         ground1.freezeWorldMatrix()
