@@ -25,14 +25,14 @@ export default class PBRMaterialFactory {
 
     private textureCache: ITextureMap = {}
 
-    constructor(scene: Scene) {
+    public constructor(scene: Scene) {
         this.scene = scene
     }
 
     /**
      * Returns the specified PBR texture
      */
-    create = (type: string, opts: IPBRMaterialFactoryOptions): PBRMaterial => {
+    public create = (type: string, opts: IPBRMaterialFactoryOptions): PBRMaterial => {
         const {
             isDynamic = false,
             pScale = 0.1,

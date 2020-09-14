@@ -1,10 +1,9 @@
-import {Control, Ellipse} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
+
+interface IVirtualJoystickControls { container: Control, inner: Control }
 
 export default class GUIFactory {
-    /**
-     * @param {AdvancedDynamicTexture} ui
-     */
-    static createVirtualJoystick = (ui) => {
+    public static createVirtualJoystick = (ui: AdvancedDynamicTexture): IVirtualJoystickControls => {
         const DIAMETER = 120
         const container = new Ellipse()
         container.name = 'move-stick'

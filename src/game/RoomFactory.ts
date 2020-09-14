@@ -1,42 +1,33 @@
-import {Color3, HemisphericLight, MeshBuilder, PointLight, TransformNode, Vector3} from "@babylonjs/core";
+import {Color3, HemisphericLight, MeshBuilder, PointLight, Scene, TransformNode, Vector3} from "@babylonjs/core";
+import PBRMaterialFactory from "./PBRMaterialFactory";
 
 export default class RoomFactory {
-    /** @type {Object.<string, Mesh>} */
-    #meshCache = {}
+    private matFactory: PBRMaterialFactory = null
+    private readonly scene: Scene = null
 
-    /** @type {PBRMaterialFactory} */
-    #matFactory = null
-
-    /** @type {Scene} */
-    #scene = null
-
-    /**
-     * @param {Scene} scene
-     * @param {PBRMaterialFactory} pbrMaterialFactory
-     */
-    constructor(scene, pbrMaterialFactory) {
-        this.#scene = scene
-        this.#matFactory = pbrMaterialFactory
+    public constructor(scene: Scene, pbrMaterialFactory: PBRMaterialFactory) {
+        this.scene = scene
+        this.matFactory = pbrMaterialFactory
     }
 
-    create = () => {
+    public create = (): void => {
         const WALL_HEIGHT = 35
         const WALL_WIDTH = 100
-        const root = new TransformNode('root', this.#scene)
-        const pbr1 = this.#matFactory.create('Metal_Plate_15',
+        const root = new TransformNode('root', this.scene)
+        const pbr1 = this.matFactory.create('Metal_Plate_15',
             { pScale: 0.01, uScale: 20, vScale: 20 });
-        const pbr2 = this.#matFactory.create('Metal_Plate_41',
+        const pbr2 = this.matFactory.create('Metal_Plate_41',
             { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
 
         // Create lighting
-        const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.#scene)
+        const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.scene)
         hemLight.groundColor = new Color3(36 / 255, 40 / 255, 60 / 255)
         hemLight.diffuse = new Color3(235 / 255, 225 / 255, 250 / 255)
         hemLight.specular = Color3.White()
         hemLight.intensity = 0.4
-        this.#createPointLight(new Vector3(-25, 10, -25), root)
-        this.#createPointLight(new Vector3(-25, 10, 25), root)
-        this.#createPointLight(new Vector3(25, 10, 0), root)
+        this.createPointLight(new Vector3(-25, 10, -25), root)
+        this.createPointLight(new Vector3(-25, 10, 25), root)
+        this.createPointLight(new Vector3(25, 10, 0), root)
 
         // Create walls
         const wall1 = MeshBuilder.CreatePlane('wall1',
@@ -86,11 +77,10 @@ export default class RoomFactory {
         ground4.freezeWorldMatrix()
     }
 
-    #createPointLight = (position, parent) => {
-        const light = new PointLight('light', position, this.#scene)
+    private createPointLight = (position, parent) => {
+        const light = new PointLight('light', position, this.scene)
         light.diffuse = Color3.White()
         light.specular = Color3.White()
-        light.groundColor = Color3.White()
         light.intensity = 20
         light.parent = parent
         return light
