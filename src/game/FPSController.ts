@@ -1,8 +1,6 @@
 import {Scene, UniversalCamera, Vector3} from "@babylonjs/core";
-// @ts-ignore
-import KeyboardControls from './KeyboardControls.ts'
-// @ts-ignore
-import TouchControls from './TouchControls.ts'
+import KeyboardControls from './KeyboardControls'
+import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import IControls from "./IControls";
 
@@ -14,7 +12,7 @@ export default class FPSController {
      */
     private static DUMMY_VECTOR: Vector3 = Vector3.Zero()
 
-    private camera: UniversalCamera = null
+    private readonly camera: UniversalCamera = null
 
     private controller: IControls = null
 

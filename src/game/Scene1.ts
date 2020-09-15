@@ -1,10 +1,7 @@
 import {Engine, Scene} from '@babylonjs/core'
-// @ts-ignore
-import MaterialFactory from './PBRMaterialFactory.ts'
-// @ts-ignore
-import RoomFactory from "./RoomFactory.ts";
-// @ts-ignore
-import FPSController from './FPSController.ts'
+import MaterialFactory from './PBRMaterialFactory'
+import RoomFactory from "./RoomFactory";
+import FPSController from './FPSController'
 
 export default class Scene1 {
     private engine: Engine = null

@@ -77,7 +77,7 @@ export default class RoomFactory {
         ground4.freezeWorldMatrix()
     }
 
-    private createPointLight = (position, parent) => {
+    private createPointLight = (position: Vector3, parent: TransformNode) => {
         const light = new PointLight('light', position, this.scene)
         light.diffuse = Color3.White()
         light.specular = Color3.White()

@@ -1,4 +1,4 @@
-import GUIFactory from "./GUIFactory.ts";
+import GUIFactory from "./GUIFactory";
 import {PointerEventTypes, PointerInfo, Scene, UniversalCamera, Vector2} from "@babylonjs/core";
 import {Vector3} from "@babylonjs/core/Maths/math.vector";
 import {AdvancedDynamicTexture, Control} from "@babylonjs/gui";
