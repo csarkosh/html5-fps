@@ -1,0 +1,15 @@
+.launch-button {
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 3px;
+  white-space: nowrap;
+  width: min-content;
+
+  & .btn-success {
+    text-shadow: 1px 1px 0 rgba( 0, 0, 0, 0.3 );
+  }
+
+  & .hint {
+    margin: 0 12px;
+  }
+}

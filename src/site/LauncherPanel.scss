@@ -1,0 +1,18 @@
+.launcher-panel {
+  border-radius: 8px;
+  flex-grow: 1;
+  font-size: 21px;
+  padding: 16px;
+  position: relative;
+  width: 350px;
+
+  & .launcher-support {
+    position: absolute;
+    right: 16px;
+    top: 6px;
+
+    & svg + svg {
+      margin-left: 4px;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import VideoPreviewer from "./VideoPreviewer";
 import Glance from "./Glance";
-import GameLauncher from "./GameLauncher";
+import LauncherPanel from "./LauncherPanel";
 import Categories from "./Categories";
 import LinearProgress from './LinearProgress'
 const Game = React.lazy(() => import('./GameAdapter'))
@@ -63,15 +63,8 @@ function App() {
                             <Glance />
                         </div>
                         <div className="store-group h-safe-inset">
-                            <GameLauncher
-                                installEnabled={Boolean(state.installPrompt)}
-                                onBrowserLaunch={() => {
-                                    setState({ ...state, pathname: '/game', loading: true })
-                                }}
-                                onInstall={() => {
-                                    if (!state.installPrompt) return;
-                                    state.installPrompt.prompt()
-                                }}
+                            <LauncherPanel
+                                onLaunch={() => setState({ ...state, pathname: '/game', loading: true })}
                             />
                             <Categories />
                         </div>
