@@ -75,9 +75,7 @@ export default class GameAdapter extends React.Component {
                     >
                         {this.state.playButtonText}
                     </button>
-                    <button
-                        className="btn btn-primary btn-xl"
-                    >
+                    <button className="btn btn-primary btn-xl">
                         Settings
                     </button>
                 </div>

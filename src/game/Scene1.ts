@@ -1,4 +1,5 @@
-import {Engine, Scene} from '@babylonjs/core'
+import {Engine, Scene, Vector3, CannonJSPlugin} from '@babylonjs/core'
+import Cannon from 'cannon'
 import MaterialFactory from './PBRMaterialFactory'
 import RoomFactory from "./RoomFactory";
 import FPSController from './FPSController'
@@ -15,6 +16,7 @@ export default class Scene1 {
         const roomFactory = new RoomFactory(this.scene, new MaterialFactory(this.scene))
         roomFactory.create()
         this.player = new FPSController(canvas, this.scene)
+        this.scene.enablePhysics(new Vector3(0, -9.81, 0), new CannonJSPlugin(undefined, undefined, Cannon))
         this.scene.render()
     }
 

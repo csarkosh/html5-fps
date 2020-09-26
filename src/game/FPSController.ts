@@ -4,7 +4,11 @@ import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import IControls from "./IControls";
 
-interface ISettingsMap { ROTATION_SPEED: number, WALK_SPEED: number }
+interface ISettingsMap {
+    ENABLE_NO_CLIP: boolean,
+    ROTATION_SPEED: number,
+    WALK_SPEED: number
+}
 
 export default class FPSController {
     /**
@@ -19,6 +23,7 @@ export default class FPSController {
     private scene: Scene = null
 
     private settings: ISettingsMap = {
+        ENABLE_NO_CLIP: false,
         ROTATION_SPEED: 1 / 6 / 1000,
         WALK_SPEED: 13 / 1000,
     }
@@ -62,8 +67,12 @@ export default class FPSController {
         this.camera.rotation.x += rotSpeed * rot.x
         this.camera.rotation.y += rotSpeed * rot.y
         // Movement
+        const moveRot = this.camera.rotation.clone()
+        if (!this.settings.ENABLE_NO_CLIP) {
+            moveRot.x = 0
+        }
         const directedMovement = this.controller.direction()
-            .rotateByQuaternionToRef(this.camera.rotation.toQuaternion(), FPSController.DUMMY_VECTOR)
+            .rotateByQuaternionToRef(moveRot.toQuaternion(), FPSController.DUMMY_VECTOR)
             .scaleInPlace(this.settings.WALK_SPEED * timeDelta)
         this.camera.position.addInPlace(directedMovement)
     }

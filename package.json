@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/node": "^14.10.1",
+    "cannon": "^0.6.2",
     "idb-keyval": "^3.2.0",
     "node-sass": "^4.14.1",
     "raw-loader": "^4.0.1",
@@ -39,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/cannon": "^0.1.4"
   }
 }
