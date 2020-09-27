@@ -1,4 +1,13 @@
-import {Color3, HemisphericLight, MeshBuilder, PointLight, Scene, TransformNode, Vector3} from "@babylonjs/core";
+import {
+    Color3,
+    HemisphericLight, Mesh,
+    MeshBuilder,
+    PhysicsImpostor,
+    PointLight,
+    Scene,
+    TransformNode,
+    Vector3
+} from "@babylonjs/core";
 import PBRMaterialFactory from "./PBRMaterialFactory";
 
 export default class RoomFactory {
@@ -18,6 +27,8 @@ export default class RoomFactory {
             { pScale: 0.01, uScale: 20, vScale: 20 });
         const pbr2 = this.matFactory.create('Metal_Plate_41',
             { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
+        const pbr3 = this.matFactory.create('Mushroom_Top_001',
+            { uScale: 2, vScale: 2 })
 
         // Create lighting
         const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.scene)
@@ -57,24 +68,20 @@ export default class RoomFactory {
         wall4.freezeWorldMatrix()
 
         // Create ground
-        const ground1 = MeshBuilder.CreateGround('ground1',
-            { height: 50, width: 50, subdivisions: 1 })
+        const ground1 = Mesh.CreateGround('ground1', 100, 100, 1, this.scene)
         ground1.material = pbr1
-        ground1.parent = root
-        ground1.position = new Vector3(-25, 0, -25)
+        ground1.position = new Vector3(0, 0, 0)
         ground1.freezeWorldMatrix()
-        const ground2 = ground1.createInstance('ground2')
-        ground2.parent = root
-        ground2.position = new Vector3(-25, 0, 25)
-        ground2.freezeWorldMatrix()
-        const ground3 = ground1.createInstance('ground3')
-        ground3.parent = root
-        ground3.position = new Vector3(25, 0, -25)
-        ground3.freezeWorldMatrix()
-        const ground4 = ground1.createInstance('ground4')
-        ground4.parent = root
-        ground4.position = new Vector3(25, 0, 25)
-        ground4.freezeWorldMatrix()
+        ground1.physicsImpostor = new PhysicsImpostor(ground1, PhysicsImpostor.BoxImpostor, {
+            mass: 0, restitution: 0.4
+        }, this.scene)
+
+        const sphere = Mesh.CreateSphere('sphere', 20, 2.5, this.scene)
+        sphere.position = new Vector3(0, 10, 15)
+        sphere.material = pbr3
+        sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {
+            mass: 9.07, restitution: 0.9
+        }, this.scene)
     }
 
     private createPointLight = (position: Vector3, parent: TransformNode) => {

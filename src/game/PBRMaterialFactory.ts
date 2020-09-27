@@ -5,6 +5,9 @@ const metallicRoughnessAoTxr2 = require("../textures/Metal_Plate_041_OCC_ROUGH_M
 const basecolorTxr = require("../textures/Metal_Plate_015_basecolor.jpg");
 const normalDisplacementTxr = require("../textures/Metal_Plate_015_NRM_DSP.png");
 const metallicRoughnessAoTxr = require("../textures/Metal_Plate_015_OCC_ROUGH_METAL.jpg");
+const basecolorTxr3 = require("../textures/Mushroom_Top_001_basecolor.jpg");
+const normalDisplacementTxr3 = require("../textures/Mushroom_Top_001_NRM_DSP.png");
+const metallicRoughnessAoTxr3 = require("../textures/Mushroom_Top_001_OCC_ROUGH_METAL.jpg");
 
 
 interface IMaterialMap { [key: string]: PBRMaterial }
@@ -17,6 +20,12 @@ interface IPBRMaterialFactoryOptions {
     uScale?: number,
     vScale?: number,
 }
+
+//enum PBREnum {
+//    Metal_Plate_41,
+//    Metal_Plate_15,
+//    Mushroom_Top_001,
+//}
 
 export default class PBRMaterialFactory {
     private readonly scene: Scene = null
@@ -59,6 +68,11 @@ export default class PBRMaterialFactory {
                     albedoSrc = basecolorTxr2
                     bumpSrc = normalDisplacementTxr2
                     metallicSrc = metallicRoughnessAoTxr2
+                    break;
+                case 'Mushroom_Top_001':
+                    albedoSrc = basecolorTxr3
+                    bumpSrc = normalDisplacementTxr3
+                    metallicSrc = metallicRoughnessAoTxr3
                     break;
                 case 'Metal_Plate_15':
                 default:

@@ -13,10 +13,10 @@ export default class Scene1 {
     public init = (canvas: HTMLCanvasElement, engine: Engine): void => {
         this.engine = engine
         this.scene = new Scene(this.engine)
+        this.scene.enablePhysics(new Vector3(0, -9.81, 0), new CannonJSPlugin(undefined, undefined, Cannon))
         const roomFactory = new RoomFactory(this.scene, new MaterialFactory(this.scene))
         roomFactory.create()
         this.player = new FPSController(canvas, this.scene)
-        this.scene.enablePhysics(new Vector3(0, -9.81, 0), new CannonJSPlugin(undefined, undefined, Cannon))
         this.scene.render()
     }
 
