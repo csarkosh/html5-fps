@@ -76,7 +76,7 @@ export default class RoomFactory {
             mass: 0, restitution: 0.4
         }, this.scene)
 
-        const sphere = Mesh.CreateSphere('sphere', 20, 2.5, this.scene)
+        const sphere = Mesh.CreateSphere('sphere', 20, 0.5, this.scene)
         sphere.position = new Vector3(0, 10, 15)
         sphere.material = pbr3
         sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {

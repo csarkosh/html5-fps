@@ -76,6 +76,11 @@ export default class TouchControls implements IControls {
         return dir
     }
 
+    public isJumping = (): boolean => {
+        return false
+    }
+
+
     public rotation = (): Vector2 => {
         if (this.nextPos) {
             const deltaX = this.nextPos.x - this.prevPos.x;

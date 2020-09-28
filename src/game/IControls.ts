@@ -12,6 +12,11 @@ export default interface IControls {
     direction(): Vector3
 
     /**
+     * Returns if jump is pressed
+     */
+    isJumping(): boolean
+
+    /**
      * Returns a rotation relative to the rotation
      * of the previous frame
      */

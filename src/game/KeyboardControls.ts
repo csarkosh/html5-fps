@@ -49,6 +49,10 @@ export default class KeyboardControls implements IControls {
         return dir
     }
 
+    public isJumping = (): boolean => {
+        return Boolean(this.keysDown.Space)
+    }
+
     public rotation = (): Vector2 => {
         // Stubbed method
         return KeyboardControls.ROTATION_STUB
