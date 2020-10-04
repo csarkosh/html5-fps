@@ -8,6 +8,7 @@ import MathUtils from "./MathUtils";
 interface ISettingsMap {
     ENABLE_NO_CLIP: boolean,
     ROTATION_SPEED: number,
+    RUN_SPEED: number
     WALK_SPEED: number
 }
 
@@ -26,6 +27,8 @@ export default class FPSController {
 
     private controller: IControls = null
 
+    private isJumping = false
+
     private jumpAnimation: Animation = null
 
     private scene: Scene = null
@@ -34,6 +37,7 @@ export default class FPSController {
         ENABLE_NO_CLIP: false,
         ROTATION_SPEED: 1 / 6 / 1000,
         WALK_SPEED: 13 / 1000,
+        RUN_SPEED: 26 / 1000,
     }
 
     private ui: AdvancedDynamicTexture = AdvancedDynamicTexture.CreateFullscreenUI('ui')
@@ -61,7 +65,7 @@ export default class FPSController {
             { frame: 3, value: this.camera.position.y + MathUtils.inches2meters(24) },
             { frame: 10, value: this.camera.position.y }
         ])
-        // Set controller
+        // Set input controller
         this.setControls(isTouch)
     }
 
@@ -90,11 +94,13 @@ export default class FPSController {
     }
 
     private jump = (timeDelta: number): void => {
-        if (!this.controller.isJumping()) {
+        if (!this.controller.isJumping() || this.isJumping) {
             return;
         }
         this.camera.animations.push(this.jumpAnimation)
-        this.scene.beginAnimation(this.camera, 0, 10, false)
+        this.isJumping = true
+        const anim = this.scene.beginAnimation(this.camera, 0, 10, false)
+        anim.onAnimationEnd = () => this.isJumping = false
     }
 
     /**
@@ -105,9 +111,10 @@ export default class FPSController {
         if (!this.settings.ENABLE_NO_CLIP) {
             moveRot.x = 0
         }
+        const speed = this.controller.isRunning() ? this.settings.RUN_SPEED : this.settings.WALK_SPEED
         const directedMovement = this.controller.direction()
             .rotateByQuaternionToRef(moveRot.toQuaternion(), FPSController.DUMMY_VECTOR)
-            .scaleInPlace(this.settings.WALK_SPEED * timeDelta)
+            .scaleInPlace(speed * timeDelta)
         this.camera.position.addInPlace(directedMovement)
     }
 

@@ -11,10 +11,9 @@ export default interface IControls {
      */
     direction(): Vector3
 
-    /**
-     * Returns if jump is pressed
-     */
     isJumping(): boolean
+
+    isRunning(): boolean
 
     /**
      * Returns a rotation relative to the rotation

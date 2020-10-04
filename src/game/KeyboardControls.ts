@@ -53,6 +53,10 @@ export default class KeyboardControls implements IControls {
         return Boolean(this.keysDown.Space)
     }
 
+    public isRunning = (): boolean => {
+        return Boolean(this.keysDown.ShiftLeft || this.keysDown.ShiftRight)
+    }
+
     public rotation = (): Vector2 => {
         // Stubbed method
         return KeyboardControls.ROTATION_STUB

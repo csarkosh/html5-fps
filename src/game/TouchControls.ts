@@ -80,6 +80,10 @@ export default class TouchControls implements IControls {
         return false
     }
 
+    public isRunning = (): boolean => {
+        return false
+    }
+
 
     public rotation = (): Vector2 => {
         if (this.nextPos) {
