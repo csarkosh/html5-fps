@@ -36,11 +36,16 @@ export default class GameAdapter extends React.Component {
     }
 
     onPointerLockChange = () => {
+        /** @type HTMLCanvasElement */
+        const canvasEl = this.#canvas.current
         const supportsPointerLock = (
-            this.#canvas.current.requestPointerLock
-            || this.#canvas.current.mozRequestPointerLock
+            canvasEl.requestPointerLock
+            || canvasEl.mozRequestPointerLock
+            || canvasEl.webkitRequestPointerLock
         )
-        const pointerLocked = document.pointerLockElement || document.mozPointerLockElement;
+        const pointerLocked = document.pointerLockElement
+            || document.mozPointerLockElement
+            || document.webkitPointerLockElement;
         if (supportsPointerLock && !pointerLocked) {
            this.game.pause()
            this.setState({ isPlaying: false })
@@ -53,13 +58,17 @@ export default class GameAdapter extends React.Component {
         this.#canvas.current.style.height = `${window.innerHeight}px`
     }
 
-    onPlay = () => {
+    /**
+     * @param {MouseEvent<HTMLButtonElement>} e
+     */
+    onPlay = (e) => {
         this.engine.enterPointerlock()
         this.game.play()
         this.setState({
             isPlaying: true,
             playButtonText: 'Resume'
         })
+        e.target.blur()
     }
 
     onPlayTouch = () => this.game.setTouchDevice(true)
