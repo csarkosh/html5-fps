@@ -10,4 +10,11 @@ export default class MathUtils {
     public static inches2meters = (inches: number): number => {
         return inches / 39.37
     }
+
+    public static clamp = (value: number, lower: number, upper: number): number => {
+        return Math.max(
+            Math.min(value, upper),
+            lower
+        )
+    }
 }

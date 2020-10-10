@@ -21,11 +21,11 @@ interface IPBRMaterialFactoryOptions {
     vScale?: number,
 }
 
-//enum PBREnum {
-//    Metal_Plate_41,
-//    Metal_Plate_15,
-//    Mushroom_Top_001,
-//}
+export enum PBREnum {
+    Metal_Plate_41,
+    Metal_Plate_15,
+    Mushroom_Top_001,
+}
 
 export default class PBRMaterialFactory {
     private readonly scene: Scene = null
@@ -41,13 +41,13 @@ export default class PBRMaterialFactory {
     /**
      * Returns the specified PBR texture
      */
-    public create = (type: string, opts: IPBRMaterialFactoryOptions): PBRMaterial => {
+    public create = (type: PBREnum, opts: IPBRMaterialFactoryOptions): PBRMaterial => {
         const {
             isDynamic = false,
             pScale = 0.1,
         } = opts
         if (!this.materialCache[type]) {
-            const mat = new PBRMaterial(type, this.scene)
+            const mat = new PBRMaterial(PBREnum[type], this.scene)
             this.setTextures(type, mat, opts)
             mat.useParallax = true
             mat.parallaxScaleBias = pScale
@@ -60,35 +60,35 @@ export default class PBRMaterialFactory {
     /**
      * Sets the PBR textures of a material (mutative)
      */
-    private setTextures = (type: string, material: PBRMaterial, opts: IPBRMaterialFactoryOptions): void => {
+    private setTextures = (type: PBREnum, material: PBRMaterial, opts: IPBRMaterialFactoryOptions): void => {
         if (!this.textureCache[type]) {
             let albedoSrc = null, bumpSrc = null, metallicSrc = null
             switch (type) {
-                case 'Metal_Plate_41':
+                case PBREnum.Metal_Plate_41:
                     albedoSrc = basecolorTxr2
                     bumpSrc = normalDisplacementTxr2
                     metallicSrc = metallicRoughnessAoTxr2
                     break;
-                case 'Mushroom_Top_001':
+                case PBREnum.Mushroom_Top_001:
                     albedoSrc = basecolorTxr3
                     bumpSrc = normalDisplacementTxr3
                     metallicSrc = metallicRoughnessAoTxr3
                     break;
-                case 'Metal_Plate_15':
+                case PBREnum.Metal_Plate_15:
                 default:
                     albedoSrc = basecolorTxr
                     bumpSrc = normalDisplacementTxr
                     metallicSrc = metallicRoughnessAoTxr
                     break;
             }
-            this.textureCache[type] = {
+            this.textureCache[PBREnum[type]] = {
                 albedoTexture: new Texture(albedoSrc, this.scene),
                 bumpTexture: new Texture(bumpSrc, this.scene),
                 metallicTexture: new Texture(metallicSrc, this.scene),
             }
         }
         const { albedoTexture, bumpTexture, metallicTexture }
-            = this.textureCache[type]
+            = this.textureCache[PBREnum[type]]
         const { uScale = 1, vScale = 1 } = opts
         albedoTexture.uScale = uScale
         albedoTexture.vScale = vScale

@@ -1,6 +1,7 @@
 import {
     Color3,
-    HemisphericLight, Mesh,
+    HemisphericLight,
+    Mesh,
     MeshBuilder,
     PhysicsImpostor,
     PointLight,
@@ -8,7 +9,7 @@ import {
     TransformNode,
     Vector3
 } from "@babylonjs/core";
-import PBRMaterialFactory from "./PBRMaterialFactory";
+import PBRMaterialFactory, {PBREnum} from "./PBRMaterialFactory";
 
 export default class RoomFactory {
     private matFactory: PBRMaterialFactory = null
@@ -23,11 +24,11 @@ export default class RoomFactory {
         const WALL_HEIGHT = 35
         const WALL_WIDTH = 100
         const root = new TransformNode('root', this.scene)
-        const pbr1 = this.matFactory.create('Metal_Plate_15',
+        const pbr1 = this.matFactory.create(PBREnum.Metal_Plate_15,
             { pScale: 0.01, uScale: 20, vScale: 20 });
-        const pbr2 = this.matFactory.create('Metal_Plate_41',
+        const pbr2 = this.matFactory.create(PBREnum.Metal_Plate_41,
             { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
-        const pbr3 = this.matFactory.create('Mushroom_Top_001',
+        const pbr3 = this.matFactory.create(PBREnum.Mushroom_Top_001,
             { uScale: 2, vScale: 2 })
 
         // Create lighting
@@ -67,6 +68,20 @@ export default class RoomFactory {
         wall4.rotation.y = 3 * Math.PI / 2
         wall4.freezeWorldMatrix()
 
+        wall1.physicsImpostor = new PhysicsImpostor(wall1, PhysicsImpostor.BoxImpostor, {
+            mass: 0, restitution: 0.4,
+        }, this.scene)
+        wall2.physicsImpostor = new PhysicsImpostor(wall2, PhysicsImpostor.BoxImpostor, {
+            mass: 0, restitution: 0.4,
+        }, this.scene)
+        wall3.physicsImpostor = new PhysicsImpostor(wall3, PhysicsImpostor.BoxImpostor, {
+            mass: 0, restitution: 0.4,
+        }, this.scene)
+        wall4.physicsImpostor = new PhysicsImpostor(wall4, PhysicsImpostor.BoxImpostor, {
+            mass: 0, restitution: 0.4,
+        }, this.scene)
+
+
         // Create ground
         const ground1 = Mesh.CreateGround('ground1', 100, 100, 1, this.scene)
         ground1.material = pbr1
@@ -76,7 +91,7 @@ export default class RoomFactory {
             mass: 0, restitution: 0.4
         }, this.scene)
 
-        const sphere = Mesh.CreateSphere('sphere', 20, 0.5, this.scene)
+        const sphere = Mesh.CreateSphere('sphere', 20, 0.25, this.scene)
         sphere.position = new Vector3(0, 10, 15)
         sphere.material = pbr3
         sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {

@@ -1,4 +1,12 @@
-import {Animation, CircleEase, EasingFunction, Scene, UniversalCamera, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    Animation,
+    CircleEase,
+    EasingFunction,
+    Scene,
+    UniversalCamera,
+    Vector3
+} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
@@ -54,6 +62,7 @@ export default class FPSController {
         camera.applyGravity = true
         camera.checkCollisions = true
         camera.ellipsoid = new Vector3(FPSController.WIDTH, FPSController.HEAD_HEIGHT, FPSController.DEPTH)
+        camera.onCollide = (mesh: AbstractMesh): void => console.log('hello world')
         this.camera = camera
         // Create jump animation
         const easeFunc = new CircleEase()
@@ -115,7 +124,10 @@ export default class FPSController {
         const directedMovement = this.controller.direction()
             .rotateByQuaternionToRef(moveRot.toQuaternion(), FPSController.DUMMY_VECTOR)
             .scaleInPlace(speed * timeDelta)
-        this.camera.position.addInPlace(directedMovement)
+        const newPos = this.camera.position.add(directedMovement)
+        newPos.x = MathUtils.clamp(newPos.x, -48, 48)
+        newPos.z = MathUtils.clamp(newPos.z, -48, 48)
+        this.camera.position = newPos
     }
 
     /**

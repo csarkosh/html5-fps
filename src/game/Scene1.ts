@@ -17,6 +17,7 @@ export default class Scene1 {
         this.scene.enablePhysics(
             new Vector3(0, -1 * MathUtils.GRAVITY_ACCELERATION, 0),
             new CannonJSPlugin(undefined, undefined, Cannon))
+        this.scene.collisionsEnabled = true
         const roomFactory = new RoomFactory(this.scene, new MaterialFactory(this.scene))
         roomFactory.create()
         this.player = new FPSController(canvas, this.scene)
