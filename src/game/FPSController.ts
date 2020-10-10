@@ -1,5 +1,4 @@
 import {
-    AbstractMesh,
     Animation,
     CircleEase,
     EasingFunction,
@@ -62,7 +61,6 @@ export default class FPSController {
         camera.applyGravity = true
         camera.checkCollisions = true
         camera.ellipsoid = new Vector3(FPSController.WIDTH, FPSController.HEAD_HEIGHT, FPSController.DEPTH)
-        camera.onCollide = (mesh: AbstractMesh): void => console.log('hello world')
         this.camera = camera
         // Create jump animation
         const easeFunc = new CircleEase()
