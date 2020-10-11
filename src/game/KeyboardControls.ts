@@ -1,5 +1,7 @@
 import {Scene, UniversalCamera, Vector2, Vector3} from "@babylonjs/core";
 import IControls from "./IControls";
+import {AdvancedDynamicTexture, Control} from "@babylonjs/gui";
+import GUIFactory from "./GUIFactory";
 
 interface IKeysDownMap { [key: string]: boolean }
 
@@ -17,16 +19,23 @@ export default class KeyboardControls implements IControls {
 
     private scene: Scene = null
 
-    public constructor(camera: UniversalCamera) {
+    private readonly ui: AdvancedDynamicTexture
+
+    private crosshairControls: Control[]
+
+    public constructor(camera: UniversalCamera, ui: AdvancedDynamicTexture) {
         const scene = camera.getScene()
         this.camera = camera
         this.prevPos = new Vector2(scene.pointerX, scene.pointerY)
         this.scene = scene
+        this.ui = ui
+        this.crosshairControls = GUIFactory.createCrosshair(ui)
         window.addEventListener('keydown', this.onKeyDown)
         window.addEventListener('keyup', this.onKeyUp)
     }
 
     public destroy = (): void => {
+        //this.crosshairControls.forEach(control => control.dispose())
         window.removeEventListener('keydown', this.onKeyDown)
         window.removeEventListener('keyup', this.onKeyUp)
     }

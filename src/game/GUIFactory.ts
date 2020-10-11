@@ -1,4 +1,4 @@
-import {AdvancedDynamicTexture, Control, Ellipse} from "@babylonjs/gui";
+import {AdvancedDynamicTexture, Control, Ellipse, Rectangle} from "@babylonjs/gui";
 
 interface IVirtualJoystickControls { container: Control, inner: Control }
 
@@ -38,5 +38,24 @@ export default class GUIFactory {
         inner.verticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER
         container.addControl(inner)
         return { container, inner }
+    }
+
+    public static createCrosshair = (ui: AdvancedDynamicTexture): Control[] => {
+        return [
+            {height: '4px', width: '25px'},
+            {height: '25px', width: '4px'}
+        ].map(({height, width}) => {
+            const rect = new Rectangle()
+            rect.background = 'white'
+            rect.color = 'white'
+            rect.alpha = 0.5
+            rect.thickness = 0
+            rect.height = height
+            rect.width = width
+            rect.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER
+            rect.verticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER
+            ui.addControl(rect)
+            return rect
+        })
     }
 }

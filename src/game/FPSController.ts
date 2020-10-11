@@ -66,7 +66,7 @@ export default class FPSController {
             this.controller = new TouchControls(this.camera, this.ui)
             this.camera.inertia = 2
         } else {
-            this.controller = new KeyboardControls(this.camera)
+            this.controller = new KeyboardControls(this.camera, this.ui)
             this.camera.inertia = 0
         }
         prevCtlr && prevCtlr.destroy()

@@ -11,6 +11,7 @@ export default class GameAdapter extends React.Component {
     game = null
 
     state = {
+        playDisabled: false,
         isPlaying: false,
         playButtonText: 'Play'
     }
@@ -48,7 +49,8 @@ export default class GameAdapter extends React.Component {
             || document.webkitPointerLockElement;
         if (supportsPointerLock && !pointerLocked) {
            this.game.pause()
-           this.setState({ isPlaying: false })
+           this.setState({ isPlaying: false, playDisabled: true })
+            window.setTimeout(() => this.setState({ playDisabled: false }), 2000)
         }
     }
 
@@ -79,6 +81,7 @@ export default class GameAdapter extends React.Component {
                 <div style={{ zIndex: this.state.isPlaying ? -1 : 1 }}>
                     <button
                         className="btn btn-primary btn-xl"
+                        disabled={this.state.playDisabled}
                         onClick={this.onPlay}
                         onTouchStart={this.onPlayTouch}
                     >
