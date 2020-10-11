@@ -1,4 +1,4 @@
-import {Scene, UniversalCamera, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Scene, UniversalCamera, Vector3} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
@@ -66,6 +66,13 @@ export default class FPSController {
             this.camera.inertia = 0
         }
         prevCtlr && prevCtlr.destroy()
+    }
+
+    public setGun = (gun: AbstractMesh): void => {
+        gun.scaling = new Vector3(0.25, 0.25, 0.25)
+        gun.rotation = this.camera.rotation.add(new Vector3(0, 3 * Math.PI / 2, 0))
+        gun.position = new Vector3(0.5, -0.5, 1.5)
+        gun.parent = this.camera
     }
 
     /**
