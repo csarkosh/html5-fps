@@ -76,10 +76,6 @@ export default class TouchControls implements IControls {
         return dir
     }
 
-    public isJumping = (): boolean => {
-        return false
-    }
-
     public isRunning = (): boolean => {
         return false
     }

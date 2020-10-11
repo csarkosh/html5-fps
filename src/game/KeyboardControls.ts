@@ -49,10 +49,6 @@ export default class KeyboardControls implements IControls {
         return dir
     }
 
-    public isJumping = (): boolean => {
-        return Boolean(this.keysDown.Space)
-    }
-
     public isRunning = (): boolean => {
         return Boolean(this.keysDown.ShiftLeft || this.keysDown.ShiftRight)
     }

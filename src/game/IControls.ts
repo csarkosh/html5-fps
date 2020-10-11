@@ -11,8 +11,6 @@ export default interface IControls {
      */
     direction(): Vector3
 
-    isJumping(): boolean
-
     isRunning(): boolean
 
     /**

@@ -1,7 +1,4 @@
 import {
-    Animation,
-    CircleEase,
-    EasingFunction,
     Scene,
     UniversalCamera,
     Vector3
@@ -34,10 +31,6 @@ export default class FPSController {
 
     private controller: IControls = null
 
-    private isJumping = false
-
-    private jumpAnimation: Animation = null
-
     private scene: Scene = null
 
     private settings: ISettingsMap = {
@@ -51,7 +44,6 @@ export default class FPSController {
 
     public constructor(canvas: HTMLCanvasElement, scene: Scene, isTouch: boolean = false) {
         this.scene = scene
-        // Create camera
         const camera = new UniversalCamera('player', new Vector3(0,FPSController.HEIGHT - FPSController.HEAD_HEIGHT / 2,0), scene)
         camera.setTarget(Vector3.Zero())
         camera.attachControl(canvas)
@@ -62,17 +54,6 @@ export default class FPSController {
         camera.checkCollisions = true
         camera.ellipsoid = new Vector3(FPSController.WIDTH, FPSController.HEAD_HEIGHT, FPSController.DEPTH)
         this.camera = camera
-        // Create jump animation
-        const easeFunc = new CircleEase()
-        easeFunc.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
-        this.jumpAnimation = new Animation('jump', 'position.y', 10, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
-        this.jumpAnimation.setEasingFunction(easeFunc)
-        this.jumpAnimation.setKeys([
-            { frame: 0, value: this.camera.position.y },
-            { frame: 3, value: this.camera.position.y + MathUtils.inches2meters(24) },
-            { frame: 10, value: this.camera.position.y }
-        ])
-        // Set input controller
         this.setControls(isTouch)
     }
 
@@ -97,17 +78,6 @@ export default class FPSController {
     public update = (timeDelta: number): void => {
         this.rotate(timeDelta)
         this.move(timeDelta)
-        this.jump(timeDelta)
-    }
-
-    private jump = (timeDelta: number): void => {
-        if (!this.controller.isJumping() || this.isJumping) {
-            return;
-        }
-        this.camera.animations.push(this.jumpAnimation)
-        this.isJumping = true
-        const anim = this.scene.beginAnimation(this.camera, 0, 10, false)
-        anim.onAnimationEnd = () => this.isJumping = false
     }
 
     /**
