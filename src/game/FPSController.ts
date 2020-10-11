@@ -76,10 +76,6 @@ export default class FPSController {
         gun.position = new Vector3(0.5, -0.7, 2)
         gun.parent = this.camera
         this.gun = gun
-        // @ts-ignore
-        window.gun = gun
-        // @ts-ignore
-        window.cam = this.camera
     }
 
     /**

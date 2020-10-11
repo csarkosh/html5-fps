@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, CannonJSPlugin, SceneLoader} from '@babylonjs/core'
+import {Engine, Scene, Vector3, CannonJSPlugin, SceneLoader, AbstractMesh} from '@babylonjs/core'
 import '@babylonjs/loaders'
 import Cannon from 'cannon'
 import MaterialFactory from './PBRMaterialFactory'
@@ -7,7 +7,6 @@ import FPSController from './FPSController'
 import MathUtils from "./MathUtils";
 // @ts-ignore
 import ak47ModelPath from '../models/AK47.glb'
-
 export default class Scene1 {
     private engine: Engine = null
     private isPlaying: boolean = false
@@ -17,9 +16,6 @@ export default class Scene1 {
     public init = (canvas: HTMLCanvasElement, engine: Engine): void => {
         this.engine = engine
         this.scene = new Scene(this.engine)
-        const paths = ak47ModelPath.split('/')
-        const filename = paths.pop()
-        const rootPath = paths.join('/') + '/'
         this.scene.enablePhysics(
             new Vector3(0, -1 * MathUtils.GRAVITY_ACCELERATION, 0),
             new CannonJSPlugin(undefined, undefined, Cannon))
@@ -27,10 +23,21 @@ export default class Scene1 {
         const roomFactory = new RoomFactory(this.scene, new MaterialFactory(this.scene))
         roomFactory.create()
         this.player = new FPSController(canvas, this.scene)
-        SceneLoader.ImportMesh('', rootPath, filename, this.scene, ([ak47]) => {
-            this.player.setGun(ak47)
+
+        const [ak47Root, ak47Name] = this.splitPathName(ak47ModelPath)
+        SceneLoader.ImportMesh('', ak47Root, ak47Name, this.scene, (meshes: AbstractMesh[]) => {
+            meshes.forEach((mesh: AbstractMesh) => mesh.renderingGroupId = 1)
+            this.player.setGun(meshes[0])
         })
+
         this.scene.render()
+    }
+
+    private splitPathName = (fullPath: string): string[] => {
+        const paths = fullPath.split('/')
+        const name = paths.pop()
+        const root = paths.join('/') + '/'
+        return [root, name]
     }
 
     public pause = (): void => {
