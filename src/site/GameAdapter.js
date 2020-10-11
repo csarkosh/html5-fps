@@ -66,11 +66,12 @@ export default class GameAdapter extends React.Component {
     onPlay = (e) => {
         this.engine.enterPointerlock()
         this.game.play()
+        e.target.blur()
+        e.stopPropagation()
         this.setState({
             isPlaying: true,
             playButtonText: 'Resume'
         })
-        e.target.blur()
     }
 
     onPlayTouch = () => this.game.setTouchDevice(true)

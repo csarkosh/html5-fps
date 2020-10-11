@@ -81,21 +81,13 @@ export default class RoomFactory {
             mass: 0, restitution: 0.4,
         }, this.scene)
 
-
         // Create ground
         const ground1 = Mesh.CreateGround('ground1', 100, 100, 1, this.scene)
         ground1.material = pbr1
         ground1.position = new Vector3(0, 0, 0)
         ground1.freezeWorldMatrix()
         ground1.physicsImpostor = new PhysicsImpostor(ground1, PhysicsImpostor.BoxImpostor, {
-            mass: 0, restitution: 0.4
-        }, this.scene)
-
-        const sphere = Mesh.CreateSphere('sphere', 20, 0.25, this.scene)
-        sphere.position = new Vector3(0, 10, 15)
-        sphere.material = pbr3
-        sphere.physicsImpostor = new PhysicsImpostor(sphere, PhysicsImpostor.SphereImpostor, {
-            mass: 9.07, restitution: 0.9
+            mass: 0, restitution: 0.4, friction: 1
         }, this.scene)
     }
 

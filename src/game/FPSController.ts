@@ -1,8 +1,4 @@
-import {
-    Scene,
-    UniversalCamera,
-    Vector3
-} from "@babylonjs/core";
+import {Scene, UniversalCamera, Vector3} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";

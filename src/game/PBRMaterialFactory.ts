@@ -41,11 +41,13 @@ export default class PBRMaterialFactory {
     /**
      * Returns the specified PBR texture
      */
-    public create = (type: PBREnum, opts: IPBRMaterialFactoryOptions): PBRMaterial => {
+    public create = (type: PBREnum, opts: IPBRMaterialFactoryOptions = {}): PBRMaterial => {
         const {
             isDynamic = false,
             pScale = 0.1,
         } = opts
+        opts.uScale = opts.uScale || 1
+        opts.vScale = opts.vScale || 1
         if (!this.materialCache[type]) {
             const mat = new PBRMaterial(PBREnum[type], this.scene)
             this.setTextures(type, mat, opts)

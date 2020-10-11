@@ -23,6 +23,8 @@ export default class KeyboardControls implements IControls {
 
     private crosshairControls: Control[]
 
+    private firing: boolean = false
+
     public constructor(camera: UniversalCamera, ui: AdvancedDynamicTexture) {
         const scene = camera.getScene()
         this.camera = camera
@@ -32,12 +34,14 @@ export default class KeyboardControls implements IControls {
         this.crosshairControls = GUIFactory.createCrosshair(ui)
         window.addEventListener('keydown', this.onKeyDown)
         window.addEventListener('keyup', this.onKeyUp)
+        window.addEventListener('click', this.onClick)
     }
 
     public destroy = (): void => {
-        //this.crosshairControls.forEach(control => control.dispose())
+        this.crosshairControls.forEach(control => control.dispose())
         window.removeEventListener('keydown', this.onKeyDown)
         window.removeEventListener('keyup', this.onKeyUp)
+        window.removeEventListener('click', this.onClick)
     }
 
     public direction = (): Vector3 => {
@@ -62,9 +66,19 @@ export default class KeyboardControls implements IControls {
         return Boolean(this.keysDown.ShiftLeft || this.keysDown.ShiftRight)
     }
 
+    public isFiring(): boolean {
+        const ret = this.firing
+        this.firing = false
+        return ret
+    }
+
     public rotation = (): Vector2 => {
         // Stubbed method
         return KeyboardControls.ROTATION_STUB
+    }
+
+    private onClick = (): void => {
+        this.firing = true
     }
 
     private onKeyDown = (e: KeyboardEvent): void => {

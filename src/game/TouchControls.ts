@@ -91,6 +91,10 @@ export default class TouchControls implements IControls {
         return this.rotationRet
     }
 
+    public isFiring(): boolean {
+        return false
+    }
+
     private onScenePointerObservable = (info: PointerInfo): void => {
         // @ts-ignore Babylonjs bug
         const pointerId = info.event.pointerId;

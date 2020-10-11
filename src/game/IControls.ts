@@ -11,6 +11,8 @@ export default interface IControls {
      */
     direction(): Vector3
 
+    isFiring(): boolean
+
     isRunning(): boolean
 
     /**
