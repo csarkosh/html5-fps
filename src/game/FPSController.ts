@@ -71,7 +71,7 @@ export default class FPSController {
     public setGun = (gun: AbstractMesh): void => {
         gun.scaling = new Vector3(0.25, 0.25, 0.25)
         gun.rotation = this.camera.rotation.add(new Vector3(0, 3 * Math.PI / 2, 0))
-        gun.position = new Vector3(0.5, -0.5, 1.5)
+        gun.position = new Vector3(0.5, -0.7, 2)
         gun.parent = this.camera
     }
 
