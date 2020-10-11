@@ -28,8 +28,6 @@ export default class RoomFactory {
             { pScale: 0.01, uScale: 20, vScale: 20 });
         const pbr2 = this.matFactory.create(PBREnum.Metal_Plate_41,
             { uScale: 2 * WALL_WIDTH / WALL_HEIGHT, vScale: 2 })
-        const pbr3 = this.matFactory.create(PBREnum.Mushroom_Top_001,
-            { uScale: 2, vScale: 2 })
 
         // Create lighting
         const hemLight = new HemisphericLight('hemLight', Vector3.Up(), this.scene)
