@@ -1,4 +1,11 @@
-import {Engine, Scene, Vector3, CannonJSPlugin, SceneLoader, AbstractMesh} from '@babylonjs/core'
+import {
+    Engine,
+    Scene,
+    Vector3,
+    CannonJSPlugin,
+    SceneLoader,
+    AbstractMesh
+} from '@babylonjs/core'
 import '@babylonjs/loaders'
 import Cannon from 'cannon'
 import MaterialFactory from './PBRMaterialFactory'

@@ -73,7 +73,7 @@ export default class FPSController {
     public setGun = (gun: AbstractMesh): void => {
         gun.scaling = new Vector3(0.25, 0.25, 0.25)
         gun.rotation = this.camera.rotation.add(new Vector3(0, 3 * Math.PI / 2, 0))
-        gun.position = new Vector3(0.5, -0.7, 2)
+        gun.position = new Vector3(this.getGunOffset(), -0.7, 2)
         gun.parent = this.camera
         this.gun = gun
     }
@@ -85,7 +85,7 @@ export default class FPSController {
         this.rotate(timeDelta)
         this.move(timeDelta)
         if (this.gun) {
-            this.gun.position.x = window.innerWidth < 600 ? 0.3 : 0.5
+            this.gun.position.x = this.getGunOffset()
         }
     }
 
@@ -115,5 +115,17 @@ export default class FPSController {
         const rotSpeed = this.settings.ROTATION_SPEED * timeDelta
         this.camera.rotation.x += rotSpeed * rot.x
         this.camera.rotation.y += rotSpeed * rot.y
+    }
+
+    private getGunOffset = (): number => {
+        const ratio = window.innerHeight / window.innerWidth
+        if (ratio > 2.10) {
+            return 0.2
+        } else if (ratio > 1.63) {
+            return 0.3
+        } else if (ratio > 0.4) {
+            return 0.4
+        }
+        return 0.5
     }
 }
