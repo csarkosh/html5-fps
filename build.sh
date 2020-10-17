@@ -12,14 +12,14 @@ sed -i -e "s%${REPLACE_TAG}%${CSS}%g" build/index.html
 
 # gzip & sync to s3
 find build -type f -exec gzip -r9 {} \; -exec mv {}.gz {} \;
-aws s3 sync build s3://webgl.csarko.sh \
+aws s3 sync build s3://babylonjs-fps-demo.csarko.sh \
     --cache-control max-age=31536000,public \
     --content-encoding gzip \
     --delete \
     --exclude .github \
     --exclude index.html \
     --exclude asset-manifest.json
-aws s3 sync build s3://webgl.csarko.sh \
+aws s3 sync build s3://babylonjs-fps-demo.csarko.sh \
     --cache-control no-store \
     --content-encoding gzip \
     --exclude "*" \

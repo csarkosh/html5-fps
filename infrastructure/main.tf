@@ -11,7 +11,7 @@ provider "aws" {
 }
 
 locals {
-  domain_name = "webgl.csarko.sh"
+  domain_name = "babylonjs-fps-demo.csarko.sh"
 }
 
 data "aws_acm_certificate" "cert" {
