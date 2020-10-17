@@ -199,7 +199,8 @@ a, .btn.btn-link {
   font-size: 12px;
   gap: 4px 0;
   grid-template-columns: 36px 1fr;
-  width: 290px;
+  margin-top: 16px;
+  width: calc(100% - 8px);
   & svg {
     vertical-align: middle;
   }

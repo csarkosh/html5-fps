@@ -1,5 +1,6 @@
 import React from 'react'
 import {FaExternalLinkAlt} from "react-icons/fa";
+import Categories from "./Categories";
 
 function Glance() {
     return (
@@ -32,6 +33,7 @@ function Glance() {
                         <span className="glace-genre bg-secondary text-primary">Shooter</span>
                     </div>
                 </div>
+                <Categories />
             </div>
         </div>
     )

@@ -2,7 +2,6 @@ import React from 'react'
 import VideoPreviewer from "./VideoPreviewer";
 import Glance from "./Glance";
 import LauncherPanel from "./LauncherPanel";
-import Categories from "./Categories";
 import LinearProgress from './LinearProgress'
 const Game = React.lazy(() => import('./GameAdapter'))
 
@@ -58,15 +57,14 @@ function App() {
                         <LinearProgress style={{ opacity: state.loading ? 1 : 0 }}/>
                     </header>
                     <div className="store-wrapper">
-                        <div className="store-group">
-                            <VideoPreviewer />
-                            <Glance />
-                        </div>
                         <div className="store-group h-safe-inset">
                             <LauncherPanel
                                 onLaunch={() => setState({ ...state, pathname: '/game', loading: true })}
                             />
-                            <Categories />
+                        </div>
+                        <div className="store-group">
+                            <VideoPreviewer />
+                            <Glance />
                         </div>
                     </div>
                 </React.Fragment>
