@@ -52,7 +52,7 @@ function App() {
                     <header className="navbar">
                         <section className="navbar-section">
                             <a href="/" className="navbar-brand mr-2 text-primary">
-                                3D Web Game
+                                Babylon.js FPS Demo
                             </a>
                         </section>
                         <LinearProgress style={{ opacity: state.loading ? 1 : 0 }}/>
