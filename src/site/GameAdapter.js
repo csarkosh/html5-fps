@@ -11,7 +11,7 @@ export default class GameAdapter extends React.Component {
     game = null
 
     state = {
-        playDisabled: false,
+        debounce: -1,
         isPlaying: false,
         playButtonText: 'Play'
     }
@@ -49,8 +49,12 @@ export default class GameAdapter extends React.Component {
             || document.webkitPointerLockElement;
         if (supportsPointerLock && !pointerLocked) {
            this.game.pause()
-           this.setState({ isPlaying: false, playDisabled: true })
-            window.setTimeout(() => this.setState({ playDisabled: false }), 2000)
+           this.setState({ isPlaying: false, debounce: 0 })
+           const id = window.setInterval(() => this.setState({ debounce: this.state.debounce + (100 - this.state.debounce) / 3 }), 200)
+           window.setTimeout(() => {
+               window.clearInterval(id)
+               this.setState({ debounce: -1 })
+           }, 2000)
         }
     }
 
@@ -80,17 +84,25 @@ export default class GameAdapter extends React.Component {
         return (
             <div className="overlay-container">
                 <div style={{ zIndex: this.state.isPlaying ? -1 : 1 }}>
-                    <button
-                        className="btn btn-primary btn-xl"
-                        disabled={this.state.playDisabled}
-                        onClick={this.onPlay}
-                        onTouchStart={this.onPlayTouch}
-                    >
-                        {this.state.playButtonText}
-                    </button>
-                    <button className="btn btn-primary btn-xl">
-                        Settings
-                    </button>
+                    {this.state.debounce > -1 ? (
+                        <React.Fragment>
+                            <h1 className="text-light">Pausing Game</h1>
+                            <progress className="progress" value={this.state.debounce} max={100} />
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            <button
+                                className="btn btn-primary btn-xl"
+                                onClick={this.onPlay}
+                                onTouchStart={this.onPlayTouch}
+                            >
+                                {this.state.playButtonText}
+                            </button>
+                            <button className="btn btn-primary btn-xl">
+                                Settings
+                            </button>
+                        </React.Fragment>
+                    )}
                 </div>
                 <canvas
                     height={720}
