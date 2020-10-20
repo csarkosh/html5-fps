@@ -34,14 +34,14 @@ export default class KeyboardControls implements IControls {
         this.crosshairControls = GUIFactory.createCrosshair(ui)
         window.addEventListener('keydown', this.onKeyDown)
         window.addEventListener('keyup', this.onKeyUp)
-        window.addEventListener('click', this.onClick)
+        window.addEventListener('mousedown', this.onClick)
     }
 
     public destroy = (): void => {
         this.crosshairControls.forEach(control => control.dispose())
         window.removeEventListener('keydown', this.onKeyDown)
         window.removeEventListener('keyup', this.onKeyUp)
-        window.removeEventListener('click', this.onClick)
+        window.removeEventListener('mousedown', this.onClick)
     }
 
     public direction = (): Vector3 => {
