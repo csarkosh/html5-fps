@@ -1,9 +1,10 @@
-import {AbstractMesh, Scene, UniversalCamera, Vector3} from "@babylonjs/core";
+import {AbstractMesh, ParticleSystem, Scene, Texture, UniversalCamera, Vector3} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import IControls from "./IControls";
 import MathUtils from "./MathUtils";
+import MuzzleFlashTxr from '../textures/muzzle_flash.png'
 
 interface ISettingsMap {
     ENABLE_NO_CLIP: boolean,
@@ -37,6 +38,8 @@ export default class FPSController {
         WALK_SPEED: 13 / 1000,
         RUN_SPEED: 26 / 1000,
     }
+
+    private muzzleFlash: ParticleSystem = null
 
     private ui: AdvancedDynamicTexture = AdvancedDynamicTexture.CreateFullscreenUI('ui')
 
@@ -76,6 +79,25 @@ export default class FPSController {
         gun.position = new Vector3(this.getGunOffset(), -0.7, 2)
         gun.parent = this.camera
         this.gun = gun
+
+        // Muzzle flash
+        const flash = new ParticleSystem('flash', 1, this.scene)
+        flash.emitter = gun
+        flash.particleTexture = new Texture(MuzzleFlashTxr, this.scene)
+        flash.isLocal = true
+        flash.minEmitBox = new Vector3(1,1.5,0.75)
+        flash.maxEmitBox = new Vector3(-1,1.5,0.75)
+        flash.targetStopDuration = 0.1
+        flash.minLifeTime = 0.05
+        flash.maxLifeTime = 0.1
+        flash.minEmitPower = 10
+        flash.maxEmitPower = 10
+        flash.direction1 = new Vector3(1,0,0)
+        flash.direction2 = new Vector3(1,0,0)
+        flash.minSize = 0.75
+        flash.maxSize = 0.75
+        flash.manualEmitCount = 0
+        this.muzzleFlash = flash
     }
 
     /**
@@ -86,6 +108,10 @@ export default class FPSController {
         this.move(timeDelta)
         if (this.gun) {
             this.gun.position.x = this.getGunOffset()
+        }
+        if (this.controller.isFiring()) {
+            this.muzzleFlash.manualEmitCount++
+            this.muzzleFlash.start()
         }
     }
 
