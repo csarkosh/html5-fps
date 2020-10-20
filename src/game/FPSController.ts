@@ -1,4 +1,4 @@
-import {AbstractMesh, ParticleSystem, Scene, Texture, UniversalCamera, Vector3} from "@babylonjs/core";
+import {AbstractMesh, Animation, ParticleSystem, Scene, Texture, UniversalCamera, Vector3} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
@@ -80,6 +80,15 @@ export default class FPSController {
         gun.parent = this.camera
         this.gun = gun
 
+        const anim = new Animation('recoil', 'position.z', 30, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
+        const originPosX = gun.position.z
+        anim.setKeys([
+            { frame: 0, value:  originPosX},
+            { frame: 1, value: originPosX - 0.25 },
+            { frame: 6, value: originPosX },
+        ])
+        gun.animations = [anim]
+
         // Muzzle flash
         const flash = new ParticleSystem('flash', 1, this.scene)
         flash.emitter = gun
@@ -110,6 +119,7 @@ export default class FPSController {
             this.gun.position.x = this.getGunOffset()
         }
         if (this.controller.isFiring()) {
+            this.scene.beginAnimation(this.gun, 0, 6)
             this.muzzleFlash.manualEmitCount++
             this.muzzleFlash.start()
         }
