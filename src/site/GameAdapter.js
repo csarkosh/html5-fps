@@ -72,6 +72,7 @@ export default class GameAdapter extends React.Component {
         this.game.play()
         e.target.blur()
         e.stopPropagation()
+        e.preventDefault()
         this.setState({
             isPlaying: true,
             playButtonText: 'Resume'
