@@ -1,10 +1,21 @@
-import {AbstractMesh, Animation, ParticleSystem, Scene, Texture, UniversalCamera, Vector3} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    Animation,
+    ParticleSystem,
+    Scene,
+    Sound,
+    Texture,
+    UniversalCamera,
+    Vector3
+} from "@babylonjs/core";
 import KeyboardControls from './KeyboardControls'
 import TouchControls from './TouchControls'
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import IControls from "./IControls";
 import MathUtils from "./MathUtils";
 import MuzzleFlashTxr from '../textures/muzzle_flash.png'
+// @ts-ignore
+import SingleShot from '../audio/ak47-single.mp3'
 
 interface ISettingsMap {
     ENABLE_NO_CLIP: boolean,
@@ -40,6 +51,8 @@ export default class FPSController {
     }
 
     private muzzleFlash: ParticleSystem = null
+
+    private singleShot: Sound
 
     private ui: AdvancedDynamicTexture = AdvancedDynamicTexture.CreateFullscreenUI('ui')
 
@@ -89,6 +102,8 @@ export default class FPSController {
         ])
         gun.animations = [anim]
 
+        this.singleShot = new Sound('singleshot', SingleShot, this.scene)
+
         // Muzzle flash
         const flash = new ParticleSystem('flash', 1, this.scene)
         flash.emitter = gun
@@ -122,6 +137,7 @@ export default class FPSController {
             this.scene.beginAnimation(this.gun, 0, 6)
             this.muzzleFlash.manualEmitCount++
             this.muzzleFlash.start()
+            this.singleShot.play()
         }
     }
 
