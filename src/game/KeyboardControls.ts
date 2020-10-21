@@ -32,16 +32,16 @@ export default class KeyboardControls implements IControls {
         this.scene = scene
         this.ui = ui
         this.crosshairControls = GUIFactory.createCrosshair(ui)
+        this.scene.getEngine().getRenderingCanvas().addEventListener('mousedown', this.onClick)
         window.addEventListener('keydown', this.onKeyDown)
         window.addEventListener('keyup', this.onKeyUp)
-        window.addEventListener('mousedown', this.onClick)
     }
 
     public destroy = (): void => {
         this.crosshairControls.forEach(control => control.dispose())
         window.removeEventListener('keydown', this.onKeyDown)
         window.removeEventListener('keyup', this.onKeyUp)
-        window.removeEventListener('mousedown', this.onClick)
+        this.scene.getEngine().getRenderingCanvas().removeEventListener('mousedown', this.onClick)
     }
 
     public direction = (): Vector3 => {
