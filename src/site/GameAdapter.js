@@ -69,10 +69,8 @@ export default class GameAdapter extends React.Component {
      */
     onPlay = (e) => {
         this.engine.enterPointerlock()
+        Engine.audioEngine.unlock()
         this.game.play()
-        e.target.blur()
-        e.stopPropagation()
-        e.preventDefault()
         this.setState({
             isPlaying: true,
             playButtonText: 'Resume'
