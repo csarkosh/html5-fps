@@ -26,8 +26,8 @@ interface ISettingsMap {
 
 export default class FPSController {
     private static HEIGHT = MathUtils.inches2meters(73)
-    private static WIDTH = MathUtils.inches2meters(24)
-    private static DEPTH = MathUtils.inches2meters(12)
+    private static WIDTH = MathUtils.inches2meters(48)
+    private static DEPTH = MathUtils.inches2meters(48)
     private static HEAD_HEIGHT = MathUtils.inches2meters(22)
 
     /**
@@ -44,7 +44,7 @@ export default class FPSController {
     private gun: AbstractMesh
 
     private settings: ISettingsMap = {
-        ENABLE_NO_CLIP: false,
+        ENABLE_NO_CLIP: true,
         ROTATION_SPEED: 1 / 6 / 1000,
         WALK_SPEED: 13 / 1000,
         RUN_SPEED: 26 / 1000,
@@ -60,13 +60,18 @@ export default class FPSController {
         this.scene = scene
         const camera = new UniversalCamera('player', new Vector3(0,FPSController.HEIGHT - FPSController.HEAD_HEIGHT / 2,0), scene)
         camera.setTarget(Vector3.Zero())
-        camera.attachControl(canvas)
+        camera.attachControl(canvas, true)
         camera.inputs.remove(camera.inputs.attached.touch)
         camera.rotation = Vector3.Zero()
         camera.inertia = 0
         camera.applyGravity = true
         camera.checkCollisions = true
         camera.ellipsoid = new Vector3(FPSController.WIDTH, FPSController.HEAD_HEIGHT, FPSController.DEPTH)
+        camera.keysLeft = [37, 65]
+        camera.keysRight = [39, 68]
+        camera.keysUp = [38, 87]
+        camera.keysDown = [40, 83]
+
         this.camera = camera
         this.setControls(isTouch)
     }
@@ -129,7 +134,7 @@ export default class FPSController {
      */
     public update = (timeDelta: number): void => {
         this.rotate(timeDelta)
-        this.move(timeDelta)
+        //this.move(timeDelta)
         if (this.gun) {
             this.gun.position.x = this.getGunOffset()
         }
@@ -153,10 +158,7 @@ export default class FPSController {
         const directedMovement = this.controller.direction()
             .rotateByQuaternionToRef(moveRot.toQuaternion(), FPSController.DUMMY_VECTOR)
             .scaleInPlace(speed * timeDelta)
-        const newPos = this.camera.position.add(directedMovement)
-        newPos.x = MathUtils.clamp(newPos.x, -48, 48)
-        newPos.z = MathUtils.clamp(newPos.z, -48, 48)
-        this.camera.position = newPos
+        this.camera.position.addInPlace(directedMovement)
     }
 
     /**

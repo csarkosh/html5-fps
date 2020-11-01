@@ -77,7 +77,8 @@ export default class KeyboardControls implements IControls {
         return KeyboardControls.ROTATION_STUB
     }
 
-    private onClick = (): void => {
+    private onClick = (e: MouseEvent): void => {
+        if (e.button !== 0) return;
         this.firing = true
     }
 

@@ -60,6 +60,7 @@ export default class Scene1 {
             this.scene.render()
             return
         }
+        this.engine.getRenderingCanvas().focus()
         const timeDelta = this.engine.getDeltaTime()
         this.player.update(timeDelta)
         this.scene.render()

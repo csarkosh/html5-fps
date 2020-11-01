@@ -46,24 +46,28 @@ export default class RoomFactory {
         wall1.parent = root
         wall1.position = new Vector3(0, WALL_HEIGHT / 2, 50)
         wall1.rotation = Vector3.Zero()
+        wall1.checkCollisions = true
         wall1.freezeWorldMatrix()
         const wall2 = wall1.createInstance('wall2')
         wall2.parent = root
         wall2.position.x = 50
         wall2.position.z = 0
         wall2.rotation.y = Math.PI / 2
+        wall2.checkCollisions = true
         wall2.freezeWorldMatrix()
         const wall3 = wall1.createInstance('wall3')
         wall3.parent = root
         wall3.position.x = 0
         wall3.position.z = -50
         wall3.rotation.y = Math.PI
+        wall3.checkCollisions = true
         wall3.freezeWorldMatrix()
         const wall4 = wall1.createInstance('wall4')
         wall4.parent = root
         wall4.position.x = -50
         wall4.position.z = 0
         wall4.rotation.y = 3 * Math.PI / 2
+        wall4.checkCollisions = true
         wall4.freezeWorldMatrix()
 
         wall1.physicsImpostor = new PhysicsImpostor(wall1, PhysicsImpostor.BoxImpostor, {
@@ -84,6 +88,7 @@ export default class RoomFactory {
         ground1.material = pbr1
         ground1.position = new Vector3(0, 0, 0)
         ground1.freezeWorldMatrix()
+        ground1.checkCollisions = true
         ground1.physicsImpostor = new PhysicsImpostor(ground1, PhysicsImpostor.BoxImpostor, {
             mass: 0, restitution: 0.4, friction: 1
         }, this.scene)
