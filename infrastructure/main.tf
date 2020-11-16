@@ -12,6 +12,10 @@ provider "aws" {
 
 locals {
   domain_name = "babylonjs-fps-demo.csarko.sh"
+  alias_names = [
+    "fps.csarko.sh",
+    "webgl.csarko.sh"
+  ]
 }
 
 data "aws_acm_certificate" "cert" {
@@ -31,6 +35,15 @@ resource "aws_route53_record" "dns_record" {
     name = aws_cloudfront_distribution.cdn.domain_name
     zone_id = aws_cloudfront_distribution.cdn.hosted_zone_id
   }
+}
+
+resource "aws_route53_record" "aliases" {
+  for_each = toset(local.alias_names)
+  name = each.key
+  ttl = 300
+  type = "CNAME"
+  zone_id = data.aws_route53_zone.zone.zone_id
+  records = [local.domain_name]
 }
 
 resource "aws_s3_bucket" "webbucket" {
@@ -62,7 +75,7 @@ resource "aws_s3_bucket" "webbucket" {
 }
 
 resource "aws_cloudfront_distribution" "cdn" {
-  aliases = [local.domain_name]
+  aliases = concat([local.domain_name], local.alias_names)
   enabled = true
   default_root_object = "index.html"
   custom_error_response {
