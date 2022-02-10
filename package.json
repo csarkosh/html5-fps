@@ -12,7 +12,7 @@
     "@types/node": "^14.10.1",
     "cannon": "^0.6.2",
     "idb-keyval": "^3.2.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "raw-loader": "^4.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
